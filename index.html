@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Studio32 — an independent animation and film studio.">
+  <meta
+    name="description"
+    content="Studio32 — an independent animation and film studio."
+  >
   <title>Studio32</title>
 
   <link rel="icon" type="image/png" href="studio32.png">
 
-  <!-- 98.css -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/98.css"
@@ -66,7 +68,7 @@
     }
 
     /*
-      Flatten 98.css and restore classic blue Windows title bars.
+      Flatten 98.css and restore classic blue title bars.
     */
 
     .window,
@@ -122,7 +124,7 @@
       line-height: 1;
     }
 
-    /* Initial page-load power screen */
+    /* Page-load power screen */
 
     #power-screen {
       position: fixed;
@@ -198,7 +200,8 @@
       opacity: 0;
     }
 
-    #desktop.shutting-down .app-window {
+    #desktop.shutting-down .app-window,
+    #desktop.shutting-down .spooky-window {
       opacity: 0;
       transform: scale(0.96);
     }
@@ -268,7 +271,8 @@
 
     /* Application windows */
 
-    .app-window {
+    .app-window,
+    .spooky-window {
       position: absolute;
       top: 100px;
       left: 280px;
@@ -281,8 +285,9 @@
         transform 1.8s ease;
     }
 
-    .app-window.front {
-      z-index: 20;
+    .app-window.front,
+    .spooky-window.front {
+      z-index: 80;
     }
 
     .app-content {
@@ -328,6 +333,29 @@
 
     .project p {
       margin: 0;
+    }
+
+    /* October easter egg */
+
+    .spooky-window {
+      top: 12%;
+      left: 30%;
+      width: min(560px, calc(100vw - 32px));
+      z-index: 80;
+    }
+
+    .spooky-content {
+      padding: 10px;
+      background: #000;
+    }
+
+    .spooky-content img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: calc(100vh - 170px);
+      object-fit: contain;
+      image-rendering: auto;
     }
 
     /* Start menu */
@@ -510,7 +538,8 @@
         gap: 8px;
       }
 
-      .app-window {
+      .app-window,
+      .spooky-window {
         top: 70px;
         left: 8px;
         width: calc(100vw - 16px);
@@ -539,7 +568,7 @@
 </head>
 
 <body>
-  <!-- Page-load power screen: intentionally not a Windows window -->
+  <!-- Standalone page-load power screen -->
   <section id="power-screen" aria-label="Power on Studio32">
     <button
       id="power-button"
@@ -706,7 +735,28 @@
       </div>
     </section>
 
-    <!-- Start menu with app items -->
+    <!-- October easter egg window -->
+    <!-- There is deliberately no close button. -->
+    <section
+      id="spooky-window"
+      class="window spooky-window hidden"
+      aria-label="Spooky Month"
+    >
+      <div class="title-bar">
+        <div class="title-bar-text">
+          itisthespookymonth.exe
+        </div>
+      </div>
+
+      <div class="window-body spooky-content">
+        <img
+          src="spookymonth.gif"
+          alt="Spooky Month animated graphic"
+        >
+      </div>
+    </section>
+
+    <!-- Start menu -->
     <section
       id="start-menu"
       class="window hidden"
@@ -738,14 +788,22 @@
           <span>Game</span>
         </button>
 
-        <button class="start-item" id="youtube-menu-item" type="button">
+        <button
+          class="start-item"
+          id="youtube-menu-item"
+          type="button"
+        >
           <span aria-hidden="true">▶</span>
           <span>YouTube</span>
         </button>
 
         <hr>
 
-        <button class="start-item" id="shutdown-button" type="button">
+        <button
+          class="start-item"
+          id="shutdown-button"
+          type="button"
+        >
           <span aria-hidden="true">⏻</span>
           <span>Shut Down</span>
         </button>
@@ -785,11 +843,25 @@
     aria-label="Studio32 intro"
   ></video>
 
-  <!-- Shutdown sound -->
+  <!-- Regular shutdown sound -->
   <audio
     id="shutdown-sound"
     src="tada.mp3"
     preload="auto"
+  ></audio>
+
+  <!-- October easter egg sounds -->
+  <audio
+    id="spooky-intro-sound"
+    src="itisthespookymonth.mp3"
+    preload="auto"
+  ></audio>
+
+  <audio
+    id="spooky-loop-sound"
+    src="spookymonth.mp3"
+    preload="auto"
+    loop
   ></audio>
 
   <script>
@@ -802,11 +874,40 @@
     const startMenu = document.getElementById("start-menu");
     const shutdownButton = document.getElementById("shutdown-button");
     const youtubeMenuItem = document.getElementById("youtube-menu-item");
+
     const shutdownSound = document.getElementById("shutdown-sound");
+
+    const spookyWindow = document.getElementById("spooky-window");
+    const spookyIntroSound = document.getElementById(
+      "spooky-intro-sound"
+    );
+    const spookyLoopSound = document.getElementById(
+      "spooky-loop-sound"
+    );
 
     let selectedIcon = null;
     let currentZIndex = 10;
     let shuttingDown = false;
+
+    let spookyInput = "";
+    let spookyUnlocked = false;
+    let spookyResetTimer = null;
+
+    const spookyCode = "itisthespookymonth";
+
+    function isOctober() {
+      /*
+        JavaScript months are zero-based:
+        January = 0
+        October = 9
+      */
+      return new Date().getMonth() === 9;
+    }
+
+    function closeStartMenu() {
+      startMenu.classList.add("hidden");
+      startButton.setAttribute("aria-expanded", "false");
+    }
 
     function selectIcon(icon) {
       document.querySelectorAll(".desktop-icon").forEach((item) => {
@@ -815,6 +916,18 @@
 
       icon.classList.add("selected");
       selectedIcon = icon;
+    }
+
+    function bringWindowToFront(windowElement) {
+      document
+        .querySelectorAll(".app-window, .spooky-window")
+        .forEach((window) => {
+          window.classList.remove("front");
+        });
+
+      windowElement.classList.remove("hidden");
+      windowElement.classList.add("front");
+      windowElement.style.zIndex = ++currentZIndex;
     }
 
     function openApp(appName) {
@@ -826,14 +939,7 @@
         return;
       }
 
-      document.querySelectorAll(".app-window").forEach((window) => {
-        window.classList.remove("front");
-      });
-
-      appWindow.classList.remove("hidden");
-      appWindow.classList.add("front");
-      appWindow.style.zIndex = ++currentZIndex;
-
+      bringWindowToFront(appWindow);
       closeStartMenu();
     }
 
@@ -841,16 +947,12 @@
       const appName = icon.dataset.app;
 
       if (appName === "youtube") {
-        window.location.href = "https://youtube.com/@studio32_prod";
+        window.location.href =
+          "https://youtube.com/@studio32_prod";
         return;
       }
 
       openApp(appName);
-    }
-
-    function closeStartMenu() {
-      startMenu.classList.add("hidden");
-      startButton.setAttribute("aria-expanded", "false");
     }
 
     function playIntroVideo() {
@@ -858,6 +960,9 @@
       introVideo.classList.remove("hidden");
 
       introVideo.play().catch(() => {
+        /*
+          If autoplay is blocked, controls are available as a fallback.
+        */
         introVideo.controls = true;
       });
 
@@ -898,7 +1003,7 @@
 
       shutdownSound.currentTime = 0;
       shutdownSound.play().catch(() => {
-        // Browsers may block audio in unusual circumstances.
+        // Audio may be blocked by the browser.
       });
 
       window.setTimeout(() => {
@@ -910,16 +1015,81 @@
       }, 2700);
     }
 
+    function finishSpookyIntro() {
+      if (spookyUnlocked) {
+        return;
+      }
+
+      openSpookyWindow();
+
+      spookyLoopSound.currentTime = 0;
+      spookyLoopSound.play().catch(() => {
+        /*
+          The typing gesture should normally count as user interaction.
+          This fallback keeps the window open if audio is blocked.
+        */
+      });
+    }
+
+    function openSpookyWindow() {
+      if (spookyUnlocked || !isOctober()) {
+        return;
+      }
+
+      spookyUnlocked = true;
+
+      bringWindowToFront(spookyWindow);
+
+      /*
+        Remove any accidental close controls if the markup is edited later.
+      */
+      spookyWindow
+        .querySelectorAll("button")
+        .forEach((button) => {
+          button.remove();
+        });
+    }
+
+    function triggerSpookyMonth() {
+      if (
+        spookyUnlocked ||
+        shuttingDown ||
+        !isOctober() ||
+        desktop.classList.contains("hidden")
+      ) {
+        return;
+      }
+
+      spookyIntroSound.currentTime = 0;
+
+      spookyIntroSound.addEventListener(
+        "ended",
+        finishSpookyIntro,
+        { once: true }
+      );
+
+      spookyIntroSound.addEventListener(
+        "error",
+        finishSpookyIntro,
+        { once: true }
+      );
+
+      spookyIntroSound.play().catch(() => {
+        /*
+          If the intro sound cannot play, still reveal the easter egg.
+        */
+        finishSpookyIntro();
+      });
+    }
+
     /*
-      Power on:
-      1. Remove the standalone black power screen.
-      2. Show the desktop.
-      3. Play the intro video with object-fit: contain.
+      Power on the desktop.
     */
 
     powerButton.addEventListener("click", () => {
       powerScreen.classList.add("hidden");
       desktop.classList.remove("hidden");
+      document.title = "Studio32 — Desktop";
       playIntroVideo();
     });
 
@@ -940,13 +1110,19 @@
     });
 
     /*
-      Window close buttons.
+      Normal application close buttons.
+      The spooky window has no close button.
     */
 
     document.querySelectorAll(".close-window").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-        button.closest(".app-window").classList.add("hidden");
+
+        const windowElement = button.closest(".app-window");
+
+        if (windowElement) {
+          windowElement.classList.add("hidden");
+        }
       });
     });
 
@@ -968,104 +1144,160 @@
       Start menu applications.
     */
 
-    document.querySelectorAll(".start-item[data-app]").forEach((item) => {
-      item.addEventListener("click", () => {
-        openApp(item.dataset.app);
+    document
+      .querySelectorAll(".start-item[data-app]")
+      .forEach((item) => {
+        item.addEventListener("click", () => {
+          openApp(item.dataset.app);
+        });
       });
-    });
 
     youtubeMenuItem.addEventListener("click", () => {
-      window.location.href = "https://youtube.com/@studio32_prod";
+      window.location.href =
+        "https://youtube.com/@studio32_prod";
     });
 
     shutdownButton.addEventListener("click", shutdown);
 
     /*
-      Make app windows draggable using their blue title bars.
+      October typing easter egg.
     */
 
-    document.querySelectorAll(".app-window").forEach((appWindow) => {
-      const titleBar = appWindow.querySelector(".title-bar");
-
-      let dragging = false;
-      let offsetX = 0;
-      let offsetY = 0;
-
-      titleBar.addEventListener("pointerdown", (event) => {
-        if (event.target.closest("button")) {
-          return;
-        }
-
-        dragging = true;
-
-        appWindow.classList.add("front");
-        appWindow.style.zIndex = ++currentZIndex;
-
-        const rect = appWindow.getBoundingClientRect();
-
-        offsetX = event.clientX - rect.left;
-        offsetY = event.clientY - rect.top;
-
-        titleBar.setPointerCapture(event.pointerId);
-      });
-
-      titleBar.addEventListener("pointermove", (event) => {
-        if (!dragging) {
-          return;
-        }
-
-        const desktopRect = desktop.getBoundingClientRect();
-        const windowRect = appWindow.getBoundingClientRect();
-
-        const taskbarHeight = 35;
-        const minimumVisible = 30;
-
-        let nextLeft =
-          event.clientX -
-          desktopRect.left -
-          offsetX;
-
-        let nextTop =
-          event.clientY -
-          desktopRect.top -
-          offsetY;
-
-        nextLeft = Math.max(
-          -windowRect.width + minimumVisible,
-          Math.min(
-            nextLeft,
-            desktopRect.width - minimumVisible
-          )
-        );
-
-        nextTop = Math.max(
-          0,
-          Math.min(
-            nextTop,
-            desktopRect.height -
-              taskbarHeight -
-              minimumVisible
-          )
-        );
-
-        appWindow.style.left = `${nextLeft}px`;
-        appWindow.style.top = `${nextTop}px`;
-      });
-
-      function stopDragging(event) {
-        dragging = false;
-
-        if (
-          event &&
-          titleBar.hasPointerCapture(event.pointerId)
-        ) {
-          titleBar.releasePointerCapture(event.pointerId);
-        }
+    document.addEventListener("keydown", (event) => {
+      if (
+        spookyUnlocked ||
+        shuttingDown ||
+        !isOctober() ||
+        desktop.classList.contains("hidden")
+      ) {
+        return;
       }
 
-      titleBar.addEventListener("pointerup", stopDragging);
-      titleBar.addEventListener("pointercancel", stopDragging);
+      const activeElement = document.activeElement;
+
+      if (
+        activeElement &&
+        (
+          activeElement.tagName === "INPUT" ||
+          activeElement.tagName === "TEXTAREA" ||
+          activeElement.isContentEditable
+        )
+      ) {
+        return;
+      }
+
+      if (event.key.length !== 1) {
+        return;
+      }
+
+      spookyInput += event.key.toLowerCase();
+
+      if (spookyInput.length > spookyCode.length) {
+        spookyInput = spookyInput.slice(-spookyCode.length);
+      }
+
+      window.clearTimeout(spookyResetTimer);
+
+      spookyResetTimer = window.setTimeout(() => {
+        spookyInput = "";
+      }, 4000);
+
+      if (spookyInput === spookyCode) {
+        spookyInput = "";
+        triggerSpookyMonth();
+      }
     });
+
+    /*
+      Make application and spooky windows draggable.
+    */
+
+    document
+      .querySelectorAll(".app-window, .spooky-window")
+      .forEach((windowElement) => {
+        const titleBar = windowElement.querySelector(".title-bar");
+
+        let dragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        titleBar.addEventListener("pointerdown", (event) => {
+          if (event.target.closest("button")) {
+            return;
+          }
+
+          dragging = true;
+
+          bringWindowToFront(windowElement);
+
+          const rect = windowElement.getBoundingClientRect();
+
+          offsetX = event.clientX - rect.left;
+          offsetY = event.clientY - rect.top;
+
+          titleBar.setPointerCapture(event.pointerId);
+        });
+
+        titleBar.addEventListener("pointermove", (event) => {
+          if (!dragging) {
+            return;
+          }
+
+          const desktopRect = desktop.getBoundingClientRect();
+          const windowRect = windowElement.getBoundingClientRect();
+
+          const taskbarHeight = 35;
+          const minimumVisible = 30;
+
+          let nextLeft =
+            event.clientX -
+            desktopRect.left -
+            offsetX;
+
+          let nextTop =
+            event.clientY -
+            desktopRect.top -
+            offsetY;
+
+          nextLeft = Math.max(
+            -windowRect.width + minimumVisible,
+            Math.min(
+              nextLeft,
+              desktopRect.width - minimumVisible
+            )
+          );
+
+          nextTop = Math.max(
+            0,
+            Math.min(
+              nextTop,
+              desktopRect.height -
+                taskbarHeight -
+                minimumVisible
+            )
+          );
+
+          windowElement.style.left = `${nextLeft}px`;
+          windowElement.style.top = `${nextTop}px`;
+        });
+
+        function stopDragging(event) {
+          dragging = false;
+
+          if (
+            event &&
+            titleBar.hasPointerCapture(event.pointerId)
+          ) {
+            titleBar.releasePointerCapture(event.pointerId);
+          }
+        }
+
+        titleBar.addEventListener("pointerup", stopDragging);
+        titleBar.addEventListener(
+          "pointercancel",
+          stopDragging
+        );
+      });
 
     /*
       Small game.
