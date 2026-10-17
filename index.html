@@ -7,6 +7,7 @@
     name="description"
     content="Studio32 — an independent animation and film studio."
   >
+
   <title>Studio32</title>
 
   <link rel="icon" type="image/png" href="studio32.png">
@@ -68,7 +69,7 @@
     }
 
     /*
-      Flatten 98.css and restore classic blue title bars.
+      Flatten 98.css gradients and rounded corners.
     */
 
     .window,
@@ -80,6 +81,10 @@
       background-image: none !important;
       border-radius: 0 !important;
     }
+
+    /*
+      Classic Windows 95 title bars.
+    */
 
     .title-bar {
       display: flex !important;
@@ -124,7 +129,10 @@
       line-height: 1;
     }
 
-    /* Page-load power screen */
+    /*
+      Initial page-load screen.
+      This intentionally is not a Windows window.
+    */
 
     #power-screen {
       position: fixed;
@@ -176,7 +184,9 @@
       line-height: 1.1;
     }
 
-    /* Desktop */
+    /*
+      Desktop.
+    */
 
     #desktop {
       position: relative;
@@ -201,7 +211,8 @@
     }
 
     #desktop.shutting-down .app-window,
-    #desktop.shutting-down .spooky-window {
+    #desktop.shutting-down .spooky-window,
+    #desktop.shutting-down #error-dialog {
       opacity: 0;
       transform: scale(0.96);
     }
@@ -269,10 +280,13 @@
       line-height: 1.05;
     }
 
-    /* Application windows */
+    /*
+      Application windows.
+    */
 
     .app-window,
-    .spooky-window {
+    .spooky-window,
+    #error-dialog {
       position: absolute;
       top: 100px;
       left: 280px;
@@ -286,8 +300,9 @@
     }
 
     .app-window.front,
-    .spooky-window.front {
-      z-index: 80;
+    .spooky-window.front,
+    #error-dialog.front {
+      z-index: 95;
     }
 
     .app-content {
@@ -335,13 +350,16 @@
       margin: 0;
     }
 
-    /* October easter egg */
+    /*
+      October spooky-month window.
+      It deliberately has no close button.
+    */
 
     .spooky-window {
       top: 12%;
       left: 30%;
-      width: min(560px, calc(100vw - 32px));
       z-index: 80;
+      width: min(560px, calc(100vw - 32px));
     }
 
     .spooky-content {
@@ -358,7 +376,51 @@
       image-rendering: auto;
     }
 
-    /* Start menu */
+    /*
+      Refresh error dialog.
+    */
+
+    #error-dialog {
+      top: 32%;
+      left: 50%;
+      z-index: 95;
+      width: min(390px, calc(100vw - 32px));
+      transform: translate(-50%, -50%);
+    }
+
+    #error-dialog .window-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 22px 18px 16px;
+    }
+
+    #error-dialog-icon {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      image-rendering: auto;
+    }
+
+    #error-dialog-message {
+      margin: 3px 0 0;
+      line-height: 1.35;
+    }
+
+    #error-dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 18px 16px;
+    }
+
+    #error-dialog-actions button {
+      min-width: 76px;
+    }
+
+    /*
+      Start menu.
+    */
 
     #start-menu {
       position: absolute;
@@ -426,7 +488,9 @@
       background: var(--win-blue);
     }
 
-    /* Taskbar */
+    /*
+      Taskbar.
+    */
 
     #taskbar {
       position: absolute;
@@ -477,7 +541,9 @@
       font-size: 13px;
     }
 
-    /* Intro video */
+    /*
+      Intro video.
+    */
 
     #intro-video {
       position: fixed;
@@ -494,7 +560,9 @@
       cursor: none !important;
     }
 
-    /* Shutdown */
+    /*
+      Shutdown.
+    */
 
     body.shutting-down,
     body.shutting-down * {
@@ -515,7 +583,9 @@
       cursor: none;
     }
 
-    /* Game */
+    /*
+      Game.
+    */
 
     #game-output {
       min-height: 45px;
@@ -539,10 +609,15 @@
       }
 
       .app-window,
-      .spooky-window {
+      .spooky-window,
+      #error-dialog {
         top: 70px;
         left: 8px;
         width: calc(100vw - 16px);
+      }
+
+      #error-dialog {
+        transform: none;
       }
 
       .app-content {
@@ -735,8 +810,8 @@
       </div>
     </section>
 
-    <!-- October easter egg window -->
-    <!-- There is deliberately no close button. -->
+    <!-- October spooky-month window -->
+    <!-- This window intentionally has no close button. -->
     <section
       id="spooky-window"
       class="window spooky-window hidden"
@@ -753,6 +828,49 @@
           src="spookymonth.gif"
           alt="Spooky Month animated graphic"
         >
+      </div>
+    </section>
+
+    <!-- Refresh error dialog -->
+    <section
+      id="error-dialog"
+      class="window hidden"
+      role="alertdialog"
+      aria-labelledby="error-dialog-title"
+      aria-describedby="error-dialog-message"
+    >
+      <div class="title-bar">
+        <div class="title-bar-text" id="error-dialog-title">
+          Studio32
+        </div>
+
+        <div class="title-bar-controls">
+          <button
+            id="error-dialog-close"
+            type="button"
+            aria-label="Close error dialog"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      <div class="window-body">
+        <img
+          id="error-dialog-icon"
+          src="error.png"
+          alt=""
+        >
+
+        <p id="error-dialog-message">
+          You killed the vibe, man... :(
+        </p>
+      </div>
+
+      <div id="error-dialog-actions">
+        <button id="error-dialog-ok" type="button">
+          OK
+        </button>
       </div>
     </section>
 
@@ -843,14 +961,14 @@
     aria-label="Studio32 intro"
   ></video>
 
-  <!-- Regular shutdown sound -->
+  <!-- Shutdown sound -->
   <audio
     id="shutdown-sound"
     src="tada.mp3"
     preload="auto"
   ></audio>
 
-  <!-- October easter egg sounds -->
+  <!-- Spooky-month sounds -->
   <audio
     id="spooky-intro-sound"
     src="itisthespookymonth.mp3"
@@ -862,6 +980,13 @@
     src="spookymonth.mp3"
     preload="auto"
     loop
+  ></audio>
+
+  <!-- Refresh error sound -->
+  <audio
+    id="error-sound"
+    src="95error.mp3"
+    preload="auto"
   ></audio>
 
   <script>
@@ -885,6 +1010,15 @@
       "spooky-loop-sound"
     );
 
+    const errorDialog = document.getElementById("error-dialog");
+    const errorDialogClose = document.getElementById(
+      "error-dialog-close"
+    );
+    const errorDialogOk = document.getElementById(
+      "error-dialog-ok"
+    );
+    const errorSound = document.getElementById("error-sound");
+
     let selectedIcon = null;
     let currentZIndex = 10;
     let shuttingDown = false;
@@ -893,14 +1027,46 @@
     let spookyUnlocked = false;
     let spookyResetTimer = null;
 
+    let refreshErrorPending = false;
+    let introFinished = false;
+
     const spookyCode = "itisthespookymonth";
 
+    /*
+      Cookie helpers.
+    */
+
+    function getCookie(name) {
+      const prefix = `${name}=`;
+
+      const cookie = document.cookie
+        .split("; ")
+        .find((item) => item.startsWith(prefix));
+
+      return cookie
+        ? decodeURIComponent(cookie.slice(prefix.length))
+        : null;
+    }
+
+    function setCookie(name, value) {
+      document.cookie =
+        `${name}=${encodeURIComponent(value)}; ` +
+        "path=/; SameSite=Lax";
+    }
+
+    /*
+      The cookie is reset after the error is detected.
+    */
+
+    function clearSpookyMonthCookie() {
+      setCookie("spookymonth", "0");
+    }
+
+    /*
+      October uses month index 9 because JavaScript months are zero-based.
+    */
+
     function isOctober() {
-      /*
-        JavaScript months are zero-based:
-        January = 0
-        October = 9
-      */
       return new Date().getMonth() === 9;
     }
 
@@ -920,7 +1086,9 @@
 
     function bringWindowToFront(windowElement) {
       document
-        .querySelectorAll(".app-window, .spooky-window")
+        .querySelectorAll(
+          ".app-window, .spooky-window, #error-dialog"
+        )
         .forEach((window) => {
           window.classList.remove("front");
         });
@@ -955,14 +1123,15 @@
       openApp(appName);
     }
 
+    /*
+      Intro video.
+    */
+
     function playIntroVideo() {
       document.body.classList.add("video-playing");
       introVideo.classList.remove("hidden");
 
       introVideo.play().catch(() => {
-        /*
-          If autoplay is blocked, controls are available as a fallback.
-        */
         introVideo.controls = true;
       });
 
@@ -980,10 +1149,61 @@
     }
 
     function finishIntroVideo() {
+      if (introFinished) {
+        return;
+      }
+
+      introFinished = true;
+
       introVideo.pause();
       introVideo.classList.add("hidden");
       document.body.classList.remove("video-playing");
+
+      showRefreshErrorIfNeeded();
     }
+
+    /*
+      Refresh error handling.
+    */
+
+    function showRefreshErrorIfNeeded() {
+      if (
+        !refreshErrorPending ||
+        spookyUnlocked ||
+        shuttingDown ||
+        desktop.classList.contains("hidden")
+      ) {
+        return;
+      }
+
+      refreshErrorPending = false;
+
+      /*
+        The old spooky session has been acknowledged.
+      */
+      clearSpookyMonthCookie();
+
+      bringWindowToFront(errorDialog);
+
+      errorSound.currentTime = 0;
+      errorSound.play().catch(() => {
+        /*
+          Browsers may block audio in some situations.
+        */
+      });
+
+      window.setTimeout(() => {
+        errorDialogOk.focus();
+      }, 0);
+    }
+
+    function closeRefreshError() {
+      errorDialog.classList.add("hidden");
+    }
+
+    /*
+      Shutdown.
+    */
 
     function shutdown() {
       if (shuttingDown) {
@@ -998,12 +1218,15 @@
       introVideo.classList.add("hidden");
       document.body.classList.remove("video-playing");
 
+      spookyLoopSound.pause();
+      spookyLoopSound.currentTime = 0;
+
       document.body.classList.add("shutting-down");
       desktop.classList.add("shutting-down");
 
       shutdownSound.currentTime = 0;
       shutdownSound.play().catch(() => {
-        // Audio may be blocked by the browser.
+        // The browser may block audio in unusual circumstances.
       });
 
       window.setTimeout(() => {
@@ -1015,39 +1238,51 @@
       }, 2700);
     }
 
+    /*
+      Spooky-month easter egg.
+    */
+
+    function openSpookyWindow() {
+      if (
+        spookyUnlocked ||
+        shuttingDown ||
+        !isOctober()
+      ) {
+        return;
+      }
+
+      spookyUnlocked = true;
+
+      /*
+        Mark the spooky session as active.
+
+        If the user refreshes or opens the website in another tab,
+        the next desktop visit will show the error dialog.
+      */
+      setCookie("spookymonth", "1");
+
+      /*
+        Since this page has successfully opened the easter egg,
+        do not show the refresh error in this same page session.
+      */
+      refreshErrorPending = false;
+
+      bringWindowToFront(spookyWindow);
+
+      spookyLoopSound.currentTime = 0;
+      spookyLoopSound.play().catch(() => {
+        /*
+          The typing interaction normally allows playback.
+        */
+      });
+    }
+
     function finishSpookyIntro() {
       if (spookyUnlocked) {
         return;
       }
 
       openSpookyWindow();
-
-      spookyLoopSound.currentTime = 0;
-      spookyLoopSound.play().catch(() => {
-        /*
-          The typing gesture should normally count as user interaction.
-          This fallback keeps the window open if audio is blocked.
-        */
-      });
-    }
-
-    function openSpookyWindow() {
-      if (spookyUnlocked || !isOctober()) {
-        return;
-      }
-
-      spookyUnlocked = true;
-
-      bringWindowToFront(spookyWindow);
-
-      /*
-        Remove any accidental close controls if the markup is edited later.
-      */
-      spookyWindow
-        .querySelectorAll("button")
-        .forEach((button) => {
-          button.remove();
-        });
     }
 
     function triggerSpookyMonth() {
@@ -1076,21 +1311,31 @@
 
       spookyIntroSound.play().catch(() => {
         /*
-          If the intro sound cannot play, still reveal the easter egg.
+          If the intro sound cannot play, still open the easter egg.
         */
         finishSpookyIntro();
       });
     }
 
     /*
-      Power on the desktop.
+      Power on.
     */
 
     powerButton.addEventListener("click", () => {
       powerScreen.classList.add("hidden");
       desktop.classList.remove("hidden");
       document.title = "Studio32 — Desktop";
+
       playIntroVideo();
+
+      /*
+        Fallback in case the video never fires an ended/error event.
+      */
+      window.setTimeout(() => {
+        if (!introFinished) {
+          finishIntroVideo();
+        }
+      }, 30000);
     });
 
     /*
@@ -1160,6 +1405,20 @@
     shutdownButton.addEventListener("click", shutdown);
 
     /*
+      Error dialog buttons.
+    */
+
+    errorDialogClose.addEventListener(
+      "click",
+      closeRefreshError
+    );
+
+    errorDialogOk.addEventListener(
+      "click",
+      closeRefreshError
+    );
+
+    /*
       October typing easter egg.
     */
 
@@ -1209,11 +1468,13 @@
     });
 
     /*
-      Make application and spooky windows draggable.
+      Make all app windows, the spooky window, and the error dialog draggable.
     */
 
     document
-      .querySelectorAll(".app-window, .spooky-window")
+      .querySelectorAll(
+        ".app-window, .spooky-window, #error-dialog"
+      )
       .forEach((windowElement) => {
         const titleBar = windowElement.querySelector(".title-bar");
 
@@ -1323,6 +1584,9 @@
           "game-output"
         ).textContent = `> ${prophecy}`;
       });
+
+    refreshErrorPending =
+      getCookie("spookymonth") === "1";
   </script>
 </body>
 </html>
