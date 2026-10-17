@@ -3,18 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta
-    name="description"
-    content="Studio32 — an independent animation and film studio."
-  >
+  <meta name="description" content="Studio32 — an independent animation and film studio.">
   <title>Studio32</title>
 
   <link rel="icon" type="image/png" href="studio32.png">
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/98.css"
-  >
+  <link rel="stylesheet" href="https://unpkg.com/98.css">
 
   <style>
     @font-face {
@@ -24,12 +17,12 @@
     }
 
     :root {
-      --win-blue: #000080;
-      --win-teal: #008080;
-      --win-gray: #c0c0c0;
-      --win-dark-gray: #808080;
-      --win-black: #000;
-      --win-white: #fff;
+      --blue: #000080;
+      --teal: #008080;
+      --gray: #c0c0c0;
+      --dark-gray: #808080;
+      --black: #000;
+      --white: #fff;
     }
 
     * {
@@ -45,8 +38,8 @@
     }
 
     body {
-      color: var(--win-black);
-      background: var(--win-teal);
+      color: var(--black);
+      background: var(--teal);
       font-family: StudioSystem, "MS Sans Serif", Arial, sans-serif;
       font-size: 16px;
       image-rendering: pixelated;
@@ -77,17 +70,13 @@
       border-radius: 0 !important;
     }
 
-    /*
-      Classic Windows 95 title bars.
-    */
-
     .title-bar {
       display: flex !important;
       align-items: center;
       min-height: 26px;
       padding: 3px 4px;
-      color: var(--win-white) !important;
-      background: var(--win-blue) !important;
+      color: var(--white) !important;
+      background: var(--blue) !important;
       font-weight: bold;
       user-select: none;
       cursor: grab;
@@ -99,7 +88,7 @@
 
     .title-bar-text {
       overflow: hidden;
-      color: var(--win-white) !important;
+      color: var(--white) !important;
       background: transparent !important;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -110,7 +99,6 @@
       align-items: center;
       gap: 4px;
       margin-left: auto;
-      color: var(--win-white) !important;
       background: transparent !important;
     }
 
@@ -118,16 +106,13 @@
       min-width: 22px;
       min-height: 20px;
       padding: 0 5px;
-      color: var(--win-black) !important;
-      background: var(--win-gray) !important;
+      color: var(--black) !important;
+      background: var(--gray) !important;
       cursor: pointer;
       line-height: 1;
     }
 
-    /*
-      Initial power screen.
-      This is intentionally not a Windows window.
-    */
+    /* Initial power screen */
 
     #power-screen {
       position: fixed;
@@ -135,7 +120,7 @@
       z-index: 100;
       display: grid;
       place-items: center;
-      background: var(--win-black);
+      background: var(--black);
     }
 
     #power-button {
@@ -146,12 +131,12 @@
       width: 155px;
       height: 155px;
       padding: 12px;
-      color: var(--win-white);
+      color: var(--white);
       background: #222;
       border-top: 5px solid #777;
       border-left: 5px solid #777;
-      border-right: 5px solid var(--win-black);
-      border-bottom: 5px solid var(--win-black);
+      border-right: 5px solid var(--black);
+      border-bottom: 5px solid var(--black);
       cursor: pointer;
     }
 
@@ -160,8 +145,8 @@
     }
 
     #power-button:active {
-      border-top-color: var(--win-black);
-      border-left-color: var(--win-black);
+      border-top-color: var(--black);
+      border-left-color: var(--black);
       border-right-color: #777;
       border-bottom-color: #777;
     }
@@ -169,7 +154,7 @@
     .power-symbol {
       font-family: Arial, sans-serif;
       font-size: 68px;
-      line-height: 0.85;
+      line-height: .85;
     }
 
     .power-label {
@@ -179,9 +164,7 @@
       line-height: 1.1;
     }
 
-    /*
-      Desktop.
-    */
+    /* Desktop */
 
     #desktop {
       position: relative;
@@ -189,10 +172,8 @@
       height: 100vh;
       padding: 14px;
       overflow: hidden;
-      background: var(--win-teal);
-      transition:
-        opacity 2.5s ease,
-        filter 2.5s ease;
+      background: var(--teal);
+      transition: opacity 2.5s ease, filter 2.5s ease;
     }
 
     #desktop.shutting-down {
@@ -209,7 +190,7 @@
     #desktop.shutting-down .spooky-window,
     #desktop.shutting-down #error-dialog {
       opacity: 0;
-      transform: scale(0.96);
+      transform: scale(.96);
     }
 
     #desktop.shutting-down #taskbar {
@@ -231,7 +212,7 @@
       align-items: center;
       width: 78px;
       padding: 4px 2px;
-      color: var(--win-white);
+      color: var(--white);
       background: transparent;
       border: 1px solid transparent;
       cursor: default;
@@ -240,8 +221,8 @@
     }
 
     .desktop-icon.selected {
-      background: var(--win-blue);
-      border-color: var(--win-white);
+      background: var(--blue);
+      border-color: var(--white);
     }
 
     .icon-image {
@@ -251,12 +232,12 @@
       height: 42px;
       margin-bottom: 5px;
       padding: 3px;
-      color: var(--win-black);
-      background: var(--win-gray);
-      border-top: 2px solid var(--win-white);
-      border-left: 2px solid var(--win-white);
-      border-right: 2px solid var(--win-black);
-      border-bottom: 2px solid var(--win-black);
+      color: var(--black);
+      background: var(--gray);
+      border-top: 2px solid var(--white);
+      border-left: 2px solid var(--white);
+      border-right: 2px solid var(--black);
+      border-bottom: 2px solid var(--black);
       font-family: Arial, sans-serif;
       font-size: 25px;
     }
@@ -275,9 +256,7 @@
       line-height: 1.05;
     }
 
-    /*
-      Moveable windows.
-    */
+    /* Moveable windows */
 
     .app-window,
     .spooky-window,
@@ -290,9 +269,7 @@
       max-height: calc(100vh - 85px);
       opacity: 1;
       transform: none;
-      transition:
-        opacity 1.8s ease,
-        transform 1.8s ease;
+      transition: opacity 1.8s ease, transform 1.8s ease;
     }
 
     .app-window.front,
@@ -313,11 +290,11 @@
 
     .inset-panel {
       padding: 14px;
-      background: var(--win-white);
-      border-top: 2px solid var(--win-dark-gray);
-      border-left: 2px solid var(--win-dark-gray);
-      border-right: 2px solid var(--win-white);
-      border-bottom: 2px solid var(--win-white);
+      background: var(--white);
+      border-top: 2px solid var(--dark-gray);
+      border-left: 2px solid var(--dark-gray);
+      border-right: 2px solid var(--white);
+      border-bottom: 2px solid var(--white);
     }
 
     .large-logo {
@@ -335,7 +312,7 @@
     .project {
       padding: 12px;
       background: #eee;
-      border: 1px solid var(--win-dark-gray);
+      border: 1px solid var(--dark-gray);
     }
 
     .project h3 {
@@ -343,20 +320,16 @@
     }
 
     .project p {
-      font-face: StudioSystem
       margin: 0;
     }
 
-    /*
-      Spooky Month window.
-      It deliberately has no close button.
-    */
+    /* Spooky Month window */
 
     .spooky-window {
       top: 12%;
       left: 30%;
-      z-index: 80;
       width: min(560px, calc(100vw - 32px));
+      z-index: 80;
     }
 
     .spooky-content {
@@ -373,14 +346,11 @@
       image-rendering: auto;
     }
 
-    /*
-      Refresh error dialog.
-    */
+    /* Error dialog */
 
     #error-dialog {
       top: 180px;
       left: 50%;
-      z-index: 95;
       width: min(430px, calc(100vw - 32px));
       transform: translateX(-50%);
     }
@@ -388,49 +358,55 @@
     #error-dialog .window-body {
       display: flex;
       align-items: flex-start;
-      gap: 22px;
+      gap: 18px;
       min-height: 105px;
-      padding: 24px 22px 20px;
-      background: var(--win-gray);
+      padding: 20px 18px 18px;
+      background: var(--gray);
     }
+
+    /*
+      The icon is larger than the original 32px version,
+      but small enough to fit naturally in the dialog.
+    */
 
     #error-dialog-icon {
       flex: 0 0 auto;
       display: block;
-      width: 540px;
-      height: 500px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
       image-rendering: auto;
     }
 
+    /*
+      Use the same StudioSystem font as the rest of the website.
+    */
+
     #error-dialog-message {
       flex: 1;
       margin: 5px 0 0;
-      color: var(--win-black);
-      font-family: Arial, "Microsoft Sans Serif", sans-serif;
-      font-size: 18px;
+      color: var(--black);
+      font-family: StudioSystem, "MS Sans Serif", Arial, sans-serif;
+      font-size: 17px;
       font-weight: normal;
-      line-height: 1.35;
+      line-height: 1.4;
       overflow-wrap: break-word;
     }
 
     #error-dialog-actions {
       display: flex;
       justify-content: flex-end;
-      padding: 0 22px 18px;
-      background: var(--win-gray);
+      padding: 0 18px 16px;
+      background: var(--gray);
     }
 
     #error-dialog-actions button {
-      min-width: 82px;
-      padding: 5px 16px;
-      font-family: Arial, "Microsoft Sans Serif", sans-serif;
-      font-size: 15px;
+      min-width: 78px;
+      padding: 5px 14px;
+      font-size: 16px;
     }
 
-    /*
-      Start menu.
-    */
+    /* Start menu */
 
     #start-menu {
       position: absolute;
@@ -450,8 +426,8 @@
       gap: 8px;
       width: 30px;
       padding: 5px 3px;
-      color: var(--win-white);
-      background: var(--win-dark-gray);
+      color: var(--white);
+      background: var(--dark-gray);
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       font-weight: bold;
@@ -466,10 +442,6 @@
       transform: rotate(90deg);
     }
 
-    .start-sidebar span {
-      display: block;
-    }
-
     .start-items {
       padding: 4px;
     }
@@ -477,8 +449,8 @@
     .start-items hr {
       margin: 4px 0;
       border: 0;
-      border-top: 1px solid var(--win-dark-gray);
-      border-bottom: 1px solid var(--win-white);
+      border-top: 1px solid var(--dark-gray);
+      border-bottom: 1px solid var(--white);
     }
 
     .start-item {
@@ -494,13 +466,11 @@
     }
 
     .start-item:hover {
-      color: var(--win-white);
-      background: var(--win-blue);
+      color: var(--white);
+      background: var(--blue);
     }
 
-    /*
-      Taskbar.
-    */
+    /* Taskbar */
 
     #taskbar {
       position: absolute;
@@ -513,8 +483,8 @@
       gap: 6px;
       height: 35px;
       padding: 3px;
-      background: var(--win-gray);
-      border-top: 2px solid var(--win-white);
+      background: var(--gray);
+      border-top: 2px solid var(--white);
       transition: opacity 1.4s ease;
     }
 
@@ -535,25 +505,23 @@
     }
 
     #start-button[aria-expanded="true"] {
-      border-top-color: var(--win-black);
-      border-left-color: var(--win-black);
-      border-right-color: var(--win-white);
-      border-bottom-color: var(--win-white);
+      border-top-color: var(--black);
+      border-left-color: var(--black);
+      border-right-color: var(--white);
+      border-bottom-color: var(--white);
     }
 
     .taskbar-status {
       margin-left: auto;
       padding: 4px 9px;
-      border-top: 2px solid var(--win-dark-gray);
-      border-left: 2px solid var(--win-dark-gray);
-      border-right: 2px solid var(--win-white);
-      border-bottom: 2px solid var(--win-white);
+      border-top: 2px solid var(--dark-gray);
+      border-left: 2px solid var(--dark-gray);
+      border-right: 2px solid var(--white);
+      border-bottom: 2px solid var(--white);
       font-size: 13px;
     }
 
-    /*
-      Intro video.
-    */
+    /* Intro video */
 
     #intro-video {
       position: fixed;
@@ -570,9 +538,7 @@
       cursor: none !important;
     }
 
-    /*
-      Shutdown.
-    */
+    /* Shutdown */
 
     body.shutting-down,
     body.shutting-down * {
@@ -586,23 +552,21 @@
       height: 100vh;
       margin: 0;
       padding: 24px;
-      color: var(--win-white);
-      background: var(--win-black);
+      color: var(--white);
+      background: var(--black);
       font: 16px monospace;
       text-align: center;
       cursor: none;
     }
 
-    /*
-      Game.
-    */
+    /* Game */
 
     #game-output {
       min-height: 45px;
       margin-top: 12px;
       padding: 9px;
       color: #00ff00;
-      background: var(--win-black);
+      background: var(--black);
       font-family: monospace;
     }
 
@@ -633,13 +597,13 @@
       }
 
       #error-dialog .window-body {
-        gap: 14px;
-        padding: 18px 14px 16px;
+        gap: 12px;
+        padding: 17px 14px 15px;
       }
 
       #error-dialog-icon {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
       }
 
       #error-dialog-message {
@@ -666,7 +630,7 @@
       *::before,
       *::after {
         animation: none !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
@@ -685,7 +649,7 @@
     </button>
   </section>
 
-  <!-- Windows 95 desktop -->
+  <!-- Desktop -->
   <main id="desktop" class="hidden" aria-label="Studio32 desktop">
     <div class="desktop-icons">
       <button class="desktop-icon" data-app="about" type="button">
@@ -716,7 +680,7 @@
       </button>
     </div>
 
-    <!-- About -->
+    <!-- About window -->
     <section
       class="window app-window hidden"
       data-window="about"
@@ -763,7 +727,7 @@
       </div>
     </section>
 
-    <!-- Projects -->
+    <!-- Projects window -->
     <section
       class="window app-window hidden"
       data-window="projects"
@@ -801,7 +765,7 @@
       </div>
     </section>
 
-    <!-- Game -->
+    <!-- Game window -->
     <section
       class="window app-window hidden"
       data-window="game"
@@ -860,7 +824,7 @@
       </div>
     </section>
 
-    <!-- Refresh error dialog -->
+    <!-- Error dialog -->
     <section
       id="error-dialog"
       class="window hidden"
@@ -888,8 +852,8 @@
         <img
           id="error-dialog-icon"
           src="error.png"
-          width="52"
-          height="52"
+          width="48"
+          height="48"
           alt="Error"
         >
 
@@ -1074,10 +1038,6 @@
 
     const spookyCode = "itisthespookymonth";
 
-    /*
-      Cookie helpers.
-    */
-
     function getCookie(name) {
       const prefix = `${name}=`;
 
@@ -1100,31 +1060,23 @@
       setCookie("spookymonth", "0");
     }
 
-    /*
-      October is month index 9.
-    */
-
     function isOctober() {
       return new Date().getMonth() === 9;
     }
 
-    /*
-      Menu and window helpers.
-    */
+    function getWindows() {
+      return document.querySelectorAll(
+        ".app-window, .spooky-window, #error-dialog"
+      );
+    }
 
     function closeStartMenu() {
       startMenu.classList.add("hidden");
       startButton.setAttribute("aria-expanded", "false");
     }
 
-    function getWindowElements() {
-      return document.querySelectorAll(
-        ".app-window, .spooky-window, #error-dialog"
-      );
-    }
-
     function bringWindowToFront(windowElement) {
-      getWindowElements().forEach((otherWindow) => {
+      getWindows().forEach((otherWindow) => {
         otherWindow.classList.remove("front");
       });
 
@@ -1155,20 +1107,14 @@
     }
 
     function launchDesktopIcon(icon) {
-      const appName = icon.dataset.app;
-
-      if (appName === "youtube") {
+      if (icon.dataset.app === "youtube") {
         window.location.href =
           "https://youtube.com/@studio32_prod";
         return;
       }
 
-      openApp(appName);
+      openApp(icon.dataset.app);
     }
-
-    /*
-      Intro video.
-    */
 
     function playIntroVideo() {
       document.body.classList.add("video-playing");
@@ -1197,17 +1143,12 @@
       }
 
       introFinished = true;
-
       introVideo.pause();
       introVideo.classList.add("hidden");
       document.body.classList.remove("video-playing");
 
       showRefreshErrorIfNeeded();
     }
-
-    /*
-      The error appears after a short delay.
-    */
 
     function showRefreshErrorIfNeeded() {
       if (
@@ -1224,8 +1165,8 @@
         refreshErrorTimer = null;
 
         /*
-          The user may activate the spooky easter egg during
-          the delay, so check the state again.
+          Check again in case the user activates the spooky
+          easter egg during the delay.
         */
         if (
           !refreshErrorPending ||
@@ -1242,20 +1183,12 @@
         errorDialog.classList.remove("hidden");
         errorDialog.classList.add("front");
         errorDialog.style.zIndex = ++currentZIndex;
-
-        /*
-          Center the dialog before its first drag.
-        */
         errorDialog.style.left = "50%";
         errorDialog.style.top = "180px";
-        errorDialog.style.transform =
-          "translateX(-50%)";
+        errorDialog.style.transform = "translateX(-50%)";
 
         errorSound.currentTime = 0;
-
-        errorSound.play().catch(() => {
-          // The browser may block audio in some situations.
-        });
+        errorSound.play().catch(() => {});
 
         window.setTimeout(() => {
           errorDialogOk.focus();
@@ -1267,17 +1200,12 @@
       errorDialog.classList.add("hidden");
     }
 
-    /*
-      Shutdown.
-    */
-
     function shutdown() {
       if (shuttingDown) {
         return;
       }
 
       shuttingDown = true;
-
       closeStartMenu();
 
       if (refreshErrorTimer) {
@@ -1296,10 +1224,7 @@
       document.body.classList.add("shutting-down");
 
       shutdownSound.currentTime = 0;
-
-      shutdownSound.play().catch(() => {
-        // The browser may block audio in unusual circumstances.
-      });
+      shutdownSound.play().catch(() => {});
 
       window.setTimeout(() => {
         document.body.innerHTML = `
@@ -1309,10 +1234,6 @@
         `;
       }, 2700);
     }
-
-    /*
-      Spooky Month easter egg.
-    */
 
     function openSpookyWindow() {
       if (
@@ -1324,17 +1245,6 @@
       }
 
       spookyUnlocked = true;
-
-      /*
-        This marks the spooky session as active.
-        A later reload will use this cookie to show the error.
-      */
-      setCookie("spookymonth", "1");
-
-      /*
-        The easter egg is active on this page, so cancel the
-        pending refresh error for this session.
-      */
       refreshErrorPending = false;
 
       if (refreshErrorTimer) {
@@ -1342,21 +1252,17 @@
         refreshErrorTimer = null;
       }
 
+      setCookie("spookymonth", "1");
       bringWindowToFront(spookyWindow);
 
       spookyLoopSound.currentTime = 0;
-
-      spookyLoopSound.play().catch(() => {
-        // The typing interaction should normally permit playback.
-      });
+      spookyLoopSound.play().catch(() => {});
     }
 
     function finishSpookyIntro() {
-      if (spookyUnlocked) {
-        return;
+      if (!spookyUnlocked) {
+        openSpookyWindow();
       }
-
-      openSpookyWindow();
     }
 
     function triggerSpookyMonth() {
@@ -1388,9 +1294,7 @@
       });
     }
 
-    /*
-      Power on.
-    */
+    /* Power on */
 
     powerButton.addEventListener("click", () => {
       powerScreen.classList.add("hidden");
@@ -1399,9 +1303,6 @@
 
       playIntroVideo();
 
-      /*
-        Fallback if the video does not dispatch ended or error.
-      */
       window.setTimeout(() => {
         if (!introFinished) {
           finishIntroVideo();
@@ -1409,11 +1310,7 @@
       }, 30000);
     });
 
-    /*
-      Desktop icons:
-      single click selects;
-      double-click opens.
-    */
+    /* Desktop icons */
 
     document.querySelectorAll(".desktop-icon").forEach((icon) => {
       icon.addEventListener("click", () => {
@@ -1425,10 +1322,7 @@
       });
     });
 
-    /*
-      Normal application close buttons.
-      The spooky window has no close button.
-    */
+    /* Normal close buttons */
 
     document.querySelectorAll(".close-window").forEach((button) => {
       button.addEventListener("click", (event) => {
@@ -1443,25 +1337,18 @@
       });
     });
 
-    /*
-      Start button.
-    */
+    /* Start menu */
 
     startButton.addEventListener("click", () => {
       const menuIsOpen =
         !startMenu.classList.contains("hidden");
 
       startMenu.classList.toggle("hidden", menuIsOpen);
-
       startButton.setAttribute(
         "aria-expanded",
         String(!menuIsOpen)
       );
     });
-
-    /*
-      Start menu items.
-    */
 
     document
       .querySelectorAll(".start-item[data-app]")
@@ -1478,9 +1365,7 @@
 
     shutdownButton.addEventListener("click", shutdown);
 
-    /*
-      Error dialog controls.
-    */
+    /* Error dialog */
 
     errorDialogClose.addEventListener(
       "click",
@@ -1492,9 +1377,7 @@
       closeRefreshError
     );
 
-    /*
-      October typing easter egg.
-    */
+    /* October typing easter egg */
 
     document.addEventListener("keydown", (event) => {
       if (
@@ -1533,7 +1416,7 @@
 
       spookyResetTimer = window.setTimeout(() => {
         spookyInput = "";
-      }, 1100);
+      }, 4000);
 
       if (spookyInput === spookyCode) {
         spookyInput = "";
@@ -1542,11 +1425,14 @@
     });
 
     /*
-      Make normal windows, the spooky window, and the error
-      dialog draggable.
+      Draggable windows.
+
+      The error dialog begins centered with transform: translateX(-50%).
+      On the first drag, its visual position is converted to normal
+      desktop-relative left/top coordinates and the transform is removed.
     */
 
-    getWindowElements().forEach((windowElement) => {
+    getWindows().forEach((windowElement) => {
       const titleBar =
         windowElement.querySelector(".title-bar");
 
@@ -1555,7 +1441,7 @@
       let offsetY = 0;
 
       function bringForward() {
-        getWindowElements().forEach((otherWindow) => {
+        getWindows().forEach((otherWindow) => {
           otherWindow.classList.remove("front");
         });
 
@@ -1566,9 +1452,6 @@
       titleBar.addEventListener(
         "pointerdown",
         (event) => {
-          /*
-            Clicking a close button should not start dragging.
-          */
           if (event.target.closest("button")) {
             return;
           }
@@ -1585,9 +1468,7 @@
             windowElement.getBoundingClientRect();
 
           /*
-            Convert the current screen position to coordinates
-            relative to the desktop. This prevents the centered
-            error dialog from jumping on its first drag.
+            Convert screen coordinates to desktop coordinates.
           */
           windowElement.style.left =
             `${windowRect.left - desktopRect.left}px`;
@@ -1596,7 +1477,7 @@
             `${windowRect.top - desktopRect.top}px`;
 
           /*
-            Remove the centering transform before movement.
+            Remove centering transforms before dragging.
           */
           windowElement.style.transform = "none";
 
@@ -1641,10 +1522,6 @@
             desktopRect.top -
             offsetY;
 
-          /*
-            Keep part of the window visible and above
-            the taskbar.
-          */
           nextLeft = Math.max(
             -windowRect.width + minimumVisible,
             Math.min(
@@ -1692,18 +1569,13 @@
         stopDragging
       );
 
-      /*
-        Clicking inside a window brings it forward.
-      */
       windowElement.addEventListener(
         "pointerdown",
         bringForward
       );
     });
 
-    /*
-      Small game.
-    */
+    /* Game */
 
     const prophecies = [
       "make it stranger.",
@@ -1726,6 +1598,10 @@
         ).textContent = `> ${prophecy}`;
       });
 
+    /*
+      If the previous page had the spooky easter egg active,
+      show the error after the next desktop session loads.
+    */
 
     refreshErrorPending =
       getCookie("spookymonth") === "1";
