@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio32</title>
+
+  <!-- 98.css -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/98.css"
+  >
+
+  <style>
+    @font-face {
+      font-family: StudioSystem;
+      src: url("system.otf") format("opentype");
+      font-display: swap;
+    }
+
+    :root {
+      --win95-blue: #000080;
+      --win95-gray: #c0c0c0;
+      --win95-teal: #008080;
+      --win95-black: #000;
+      --win95-white: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body {
+      background: var(--win95-teal);
+      color: #000;
+      font-family: StudioSystem, "MS Sans Serif", Arial, sans-serif;
+      font-size: 16px;
+      image-rendering: pixelated;
+    }
+
+    button,
+    a {
+      font-family: inherit;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px dotted #ffff00;
+      outline-offset: 2px;
+    }
+
+    .window,
+    button,
+    input,
+    textarea,
+    select,
+    .title-bar {
+      background-image: none !important;
+    }
+
+    button,
+    .window,
+    .title-bar {
+      border-radius: 0 !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Initial power screen */
+
+    #power-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: #000;
+    }
+
+    .power-window {
+      width: min(560px, 100%);
+    }
+
+    .power-content {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .power-content h1 {
+      margin: 0 0 10px;
+      font-size: clamp(42px, 10vw, 76px);
+      letter-spacing: -4px;
+    }
+
+    .power-content p {
+      margin: 0 0 24px;
+    }
+
+    #power-button {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 155px;
+      height: 155px;
+      padding: 12px;
+      color: #fff;
+      background: #222;
+      border-top: 5px solid #777;
+      border-left: 5px solid #777;
+      border-right: 5px solid #000;
+      border-bottom: 5px solid #000;
+      cursor: pointer;
+    }
+
+    #power-button:hover {
+      background: #333;
+    }
+
+    #power-button:active {
+      border-top-color: #000;
+      border-left-color: #000;
+      border-right-color: #777;
+      border-bottom-color: #777;
+    }
+
+    .power-symbol {
+      font-family: Arial, sans-serif;
+      font-size: 68px;
+      line-height: 0.85;
+    }
+
+    .power-label {
+      margin-top: 14px;
+      font-size: 11px;
+      font-weight: bold;
+      line-height: 1.1;
+    }
+
+    /* Desktop */
+
+    #desktop {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 14px;
+      overflow: hidden;
+      background: var(--win95-teal);
+    }
+
+    .desktop-icons {
+      display: grid;
+      align-content: start;
+      justify-items: center;
+      gap: 18px;
+      width: 82px;
+    }
+
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 78px;
+      padding: 4px 2px;
+      color: #fff;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: default;
+      user-select: none;
+      text-align: center;
+    }
+
+    .desktop-icon.selected {
+      background: var(--win95-blue);
+      border-color: #fff;
+    }
+
+    .icon-image {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 5px;
+      padding: 3px;
+      color: #000;
+      background: var(--win95-gray);
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      font-family: Arial, sans-serif;
+      font-size: 25px;
+    }
+
+    .icon-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .icon-label {
+      max-width: 78px;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      line-height: 1.05;
+    }
+
+    /* App windows */
+
+    .app-window {
+      position: absolute;
+      top: 8%;
+      left: clamp(100px, 22vw, 320px);
+      z-index: 5;
+      width: min(620px, calc(100vw - 32px));
+      max-height: calc(100vh - 85px);
+    }
+
+    .app-window.front {
+      z-index: 20;
+    }
+
+    .app-content {
+      max-height: calc(100vh - 140px);
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .app-content h2 {
+      margin-top: 0;
+    }
+
+    .inset-panel {
+      padding: 14px;
+      background: #fff;
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+    }
+
+    .large-logo {
+      display: block;
+      width: min(180px, 50vw);
+      height: auto;
+      margin: 0 auto 16px;
+    }
+
+    .project-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .project {
+      padding: 12px;
+      background: #eee;
+      border: 1px solid #808080;
+    }
+
+    .project h3 {
+      margin: 0 0 6px;
+    }
+
+    .project p {
+      margin: 0;
+    }
+
+    .close-button {
+      min-width: 25px;
+      padding: 1px 5px;
+      line-height: 1;
+    }
+
+    .window-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .title-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Start menu */
+
+    #start-menu {
+      position: absolute;
+      left: 3px;
+      bottom: 35px;
+      z-index: 50;
+      width: 235px;
+      display: grid;
+      grid-template-columns: 30px 1fr;
+    }
+
+    .start-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 30px;
+  padding: 5px 3px;
+  color: #fff;
+  background: #808080;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.start-sidebar img {
+  display: block;
+  width: 22px;
+  height: 24px;
+  object-fit: contain;
+  image-rendering: auto;
+  transform: rotate(90deg);
+}
+
+.start-sidebar span {
+  display: block;
+}
+
+    .start-items {
+      padding: 4px;
+    }
+
+    .start-item {
+      display: block;
+      width: 100%;
+      padding: 9px 8px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .start-item:hover {
+      color: #fff;
+      background: var(--win95-blue);
+    }
+
+    /* Taskbar */
+
+    #taskbar {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 35px;
+      padding: 3px;
+      border-top: 2px solid #fff;
+      background: var(--win95-gray);
+    }
+
+    #start-button {
+      padding: 4px 9px;
+      font-weight: bold;
+    }
+
+    #start-button[aria-expanded="true"] {
+      border-top-color: #000;
+      border-left-color: #000;
+      border-right-color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    .taskbar-status {
+      margin-left: auto;
+      padding: 4px 9px;
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      font-size: 13px;
+    }
+
+    /* Little game */
+
+    #game-output {
+      min-height: 45px;
+      margin-top: 12px;
+      padding: 9px;
+      color: #00ff00;
+      background: #000;
+      font-family: monospace;
+    }
+
+    @media (max-width: 600px) {
+      #desktop {
+        padding: 8px;
+      }
+
+      .desktop-icons {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-flow: row;
+        width: 100%;
+        gap: 8px;
+      }
+
+      .app-window {
+        top: 70px;
+        left: 8px;
+        width: calc(100vw - 16px);
+      }
+
+      .app-content {
+        max-height: calc(100vh - 145px);
+      }
+
+      .taskbar-status {
+        max-width: 130px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Power-on screen -->
+  <section id="power-screen" aria-labelledby="power-title">
+    <div class="window power-window">
+      <div class="title-bar">
+        <div class="title-bar-text">STUDIO32.EXE</div>
+        <div class="title-bar-controls">ready</div>
+      </div>
+
+      <div class="window-body power-content">
+        <button id="power-button" type="button">
+          <span class="power-symbol" aria-hidden="true">⏻</span>
+          <span class="power-label">
+            boot
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main desktop -->
+  <main id="desktop" class="hidden" aria-label="Studio32 desktop">
+    <div class="desktop-icons">
+      <button class="desktop-icon" data-app="about" type="button">
+        <span class="icon-image">
+          <img src="studio32.png" width="340" height="354" alt="Studio32 logo">
+        </span>
+        <span class="icon-label">About</span>
+      </button>
+
+      <button class="desktop-icon" data-app="projects" type="button">
+        <span class="icon-image" aria-hidden="true">▣</span>
+        <span class="icon-label">Projects</span>
+      </button>
+
+      <button class="desktop-icon" data-app="youtube" type="button">
+        <span class="icon-image" aria-hidden="true">▶</span>
+        <span class="icon-label">YouTube</span>
+      </button>
+
+      <button class="desktop-icon" data-app="game" type="button">
+        <span class="icon-image" aria-hidden="true">?</span>
+        <span class="icon-label">Game</span>
+      </button>
+    </div>
+
+    <!-- About -->
+    <section class="window app-window hidden" data-window="about" aria-labelledby="about-title">
+      <div class="title-bar">
+        <div class="window-title">
+          <div class="title-bar-text" id="about-title">About Studio32</div>
+
+          <div class="title-controls">
+            <button class="close-button close-window" type="button" aria-label="Close About">
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="window-body app-content">
+        <img
+          class="large-logo"
+          src="studio32.png"
+          width="340"
+          height="354"
+          alt="Studio32 logo"
+        >
+
+        <div class="inset-panel">
+          <h2>About Studio32.</h2>
+          <p>
+            Studio32 is a indie animation/film studio started by some teens
+            hoping to not only make cool things, but also make something bigger.
+          </p>
+          <p>
+            Studio32 is making some cool things, cringe, not cringe. Depends on the teams acting skills ;)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="window app-window hidden" data-window="projects" aria-labelledby="projects-title">
+      <div class="title-bar">
+        <div class="window-title">
+          <div class="title-bar-text" id="projects-title">
+            Projects 
+          </div>
+
+          <div class="title-controls">
+            <button class="close-button close-window" type="button" aria-label="Close Projects">
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="window-body app-content">
+        <h2>Projects</h2>
+
+        <div class="project-list">
+          <article class="project">
+            <h3>The Eco-Man Show // Coming Soon</h3>
+            <p>A green hero saves a random-ass city we don't know much about! Will he save it? Probably not.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Little game -->
+    <section class="window app-window hidden" data-window="game" aria-labelledby="game-title">
+      <div class="title-bar">
+        <div class="window-title">
+          <div class="title-bar-text" id="game-title">
+            Game
+          </div>
+
+          <div class="title-controls">
+            <button class="close-button close-window" type="button" aria-label="Close Little Game">
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="window-body app-content">
+        <h2>GAMING MOMENT</h2>
+
+        <div class="inset-panel">
+          <p>click the button below and aqcuire true gaming.</p>
+
+          <button id="game-button" type="button">
+            make thing
+          </button>
+
+          <div id="game-output" aria-live="polite">
+            &gt; waiting for input...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Start menu -->
+    <section id="start-menu" class="window hidden" aria-label="Start menu">
+      <div class="start-sidebar">
+        <img
+          src="studio32.png"
+          width="340"
+          height="354"
+          alt=""
+        >
+  <span>Studio32</span>
+</div>
+
+      <div class="start-items">
+        <button class="start-item" data-app="about" type="button">
+          ▣ About
+        </button>
+
+        <button class="start-item" data-app="projects" type="button">
+          ▤ Projects
+        </button>
+
+        <button class="start-item" data-app="game" type="button">
+          ? Game
+        </button>
+
+        <button class="start-item" id="shutdown-button" type="button">
+          ⏻ Shut Down
+        </button>
+      </div>
+    </section>
+
+    <!-- Taskbar -->
+    <footer id="taskbar">
+      <button
+        id="start-button"
+        type="button"
+        aria-expanded="false"
+        aria-controls="start-menu"
+      >
+        ▣ Start
+      </button>
+
+      <span class="taskbar-status">Studio32 is running</span>
+    </footer>
+  </main>
+
+  <!-- Intro video -->
+  <video
+    id="intro-video"
+    class="hidden"
+    src="studio32intro.webm"
+    playsinline
+    preload="auto"
+    aria-label="Studio32 intro"
+  ></video>
+
+  <script>
+    const powerScreen = document.getElementById("power-screen");
+    const powerButton = document.getElementById("power-button");
+    const desktop = document.getElementById("desktop");
+    const introVideo = document.getElementById("intro-video");
+
+    const startButton = document.getElementById("start-button");
+    const startMenu = document.getElementById("start-menu");
+
+    let selectedIcon = null;
+    let currentZIndex = 10;
+
+    function bringToFront(windowElement) {
+      document.querySelectorAll(".app-window").forEach((app) => {
+        app.classList.remove("front");
+      });
+
+      windowElement.classList.remove("hidden");
+      windowElement.classList.add("front");
+      windowElement.style.zIndex = ++currentZIndex;
+    }
+
+    function openApp(appName) {
+      const appWindow = document.querySelector(
+        `[data-window="${appName}"]`
+      );
+
+      if (!appWindow) return;
+
+      bringToFront(appWindow);
+
+      startMenu.classList.add("hidden");
+      startButton.setAttribute("aria-expanded", "false");
+    }
+
+    function selectIcon(icon) {
+      document.querySelectorAll(".desktop-icon").forEach((item) => {
+        item.classList.remove("selected");
+      });
+
+      icon.classList.add("selected");
+      selectedIcon = icon;
+    }
+
+    function playIntroVideo() {
+      introVideo.classList.remove("hidden");
+
+      introVideo.style.position = "fixed";
+      introVideo.style.inset = "0";
+      introVideo.style.zIndex = "90";
+      introVideo.style.width = "100vw";
+      introVideo.style.height = "100vh";
+      introVideo.style.objectFit = "contain";
+      introVideo.style.background = "#000";
+
+      introVideo.play().catch(() => {
+        introVideo.controls = true;
+      });
+
+      introVideo.addEventListener("ended", () => {
+        introVideo.classList.add("hidden");
+      }, { once: true });
+    }
+
+    powerButton.addEventListener("click", () => {
+      powerScreen.classList.add("hidden");
+      desktop.classList.remove("hidden");
+      document.title = "Studio32 — Desktop";
+      playIntroVideo();
+    });
+
+    document.querySelectorAll(".desktop-icon").forEach((icon) => {
+      icon.addEventListener("click", () => {
+        if (selectedIcon === icon) {
+          if (icon.dataset.app === "youtube") {
+            window.location.href = "https://youtube.com/@studio32_prod";
+            return;
+          }
+
+          openApp(icon.dataset.app);
+        } else {
+          selectIcon(icon);
+        }
+      });
+
+      icon.addEventListener("dblclick", () => {
+        if (icon.dataset.app === "youtube") {
+          window.location.href = "https://youtube.com/@studio32_prod";
+          return;
+        }
+
+        openApp(icon.dataset.app);
+      });
+    });
+
+    document.querySelectorAll(".start-item[data-app]").forEach((item) => {
+      item.addEventListener("click", () => {
+        openApp(item.dataset.app);
+      });
+    });
+
+    document.querySelectorAll(".close-window").forEach((button) => {
+      button.addEventListener("click", () => {
+        button.closest(".app-window").classList.add("hidden");
+      });
+    });
+
+    startButton.addEventListener("click", () => {
+      const isOpen = !startMenu.classList.contains("hidden");
+
+      startMenu.classList.toggle("hidden", isOpen);
+      startButton.setAttribute("aria-expanded", String(!isOpen));
+    });
+
+    document.getElementById("shutdown-button").addEventListener("click", () => {
+      window.close();
+
+      document.body.innerHTML = `
+        <div style="
+          display:grid;
+          place-items:center;
+          height:100vh;
+          padding:20px;
+          background:#000;
+          color:#fff;
+          font:16px monospace;
+          text-align:center;
+        ">
+          It is now safe to close the tab.
+        </div>
+      `;
+    });
+
+    const prophecies = [
+      "make it stranger.",
+      "ship the weird version.",
+      "add more blue.",
+      "trust the first idea.",
+      "MORE COWBELL"
+    ];
+
+    document.getElementById("game-button").addEventListener("click", () => {
+      const prophecy =
+        prophecies[Math.floor(Math.random() * prophecies.length)];
+
+      document.getElementById("game-output").textContent = `> ${prophecy}`;
+    });
+  </script>
+</body>
+</html>
