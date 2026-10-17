@@ -557,6 +557,14 @@
       font: 16px monospace;
       text-align: center;
       cursor: none;
+
+      .unsafe {
+        color: red;
+        font-family: serif;
+        font-weight: bolder;
+        font-size: larger;
+        font-smooth: never;
+      }
     }
 
     /* Game */
@@ -982,6 +990,13 @@
     preload="auto"
   ></audio>
 
+  <!-- ***THE CUCKOO IS IN YOU-YOU*** -->
+  <audio
+    id="cuckoo-choir"
+    src="cuckoo-choir.mp3"
+    preload="auto"
+  ></audio>
+
   <script>
     const powerScreen = document.getElementById("power-screen");
     const powerButton = document.getElementById("power-button");
@@ -1022,6 +1037,8 @@
     const errorDialogOk = document.getElementById(
       "error-dialog-ok"
     );
+
+    const cuckooChoirLoop = document.getElementById("cuckoo-choir");
 
     const errorSound = document.getElementById(
       "error-sound"
@@ -1200,7 +1217,16 @@
       errorDialog.classList.add("hidden");
     }
 
-    function shutdown() {
+    function waitMs(ms) {
+      if (typeof ms !== 'number') throw `waitMs() was passed a ${typeof ms} instead of a number. Wha?`;
+      return new Promise(resolve => window.setTimeout(() => resolve(), ms))
+    }
+
+    /*
+      Shutdown.
+    */
+
+    async function shutdown() {
       if (shuttingDown) {
         return;
       }
@@ -1234,6 +1260,10 @@
         `;
       }, 2700);
     }
+
+    /*
+      Spooky-month easter egg.
+    */
 
     function openSpookyWindow() {
       if (
