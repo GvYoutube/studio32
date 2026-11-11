@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Studio32 — an independent animation and film studio.">
+  <meta name="description" content="Studio32 is an independent animation and film studio.">
   <title>Studio32</title>
 
   <link rel="icon" type="image/png" href="studio32.png">
@@ -112,8 +112,6 @@
       line-height: 1;
     }
 
-    /* Initial power screen */
-
     #power-screen {
       position: fixed;
       inset: 0;
@@ -163,8 +161,6 @@
       font-weight: bold;
       line-height: 1.1;
     }
-
-    /* Desktop */
 
     #desktop {
       position: relative;
@@ -256,8 +252,6 @@
       line-height: 1.05;
     }
 
-    /* Moveable windows */
-
     .app-window,
     .spooky-window,
     #error-dialog {
@@ -323,7 +317,11 @@
       margin: 0;
     }
 
-    /* Spooky Month window */
+    .project button {
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
 
     .spooky-window {
       top: 12%;
@@ -346,8 +344,6 @@
       image-rendering: auto;
     }
 
-    /* Error dialog */
-
     #error-dialog {
       top: 180px;
       left: 50%;
@@ -364,11 +360,6 @@
       background: var(--gray);
     }
 
-    /*
-      The icon is larger than the original 32px version,
-      but small enough to fit naturally in the dialog.
-    */
-
     #error-dialog-icon {
       flex: 0 0 auto;
       display: block;
@@ -377,10 +368,6 @@
       object-fit: contain;
       image-rendering: auto;
     }
-
-    /*
-      Use the same StudioSystem font as the rest of the website.
-    */
 
     #error-dialog-message {
       flex: 1;
@@ -405,8 +392,6 @@
       padding: 5px 14px;
       font-size: 16px;
     }
-
-    /* Start menu */
 
     #start-menu {
       position: absolute;
@@ -470,8 +455,6 @@
       background: var(--blue);
     }
 
-    /* Taskbar */
-
     #taskbar {
       position: absolute;
       right: 0;
@@ -521,8 +504,6 @@
       font-size: 13px;
     }
 
-    /* Intro video */
-
     #intro-video {
       position: fixed;
       inset: 0;
@@ -537,8 +518,6 @@
     body.video-playing * {
       cursor: none !important;
     }
-
-    /* Shutdown */
 
     body.shutting-down,
     body.shutting-down * {
@@ -559,8 +538,6 @@
       cursor: none;
     }
 
-    /* Game */
-
     #game-output {
       min-height: 45px;
       margin-top: 12px;
@@ -577,7 +554,6 @@
 
       .desktop-icons {
         grid-template-columns: repeat(4, 1fr);
-        grid-auto-flow: row;
         width: 100%;
         gap: 8px;
       }
@@ -637,29 +613,18 @@
 </head>
 
 <body>
-  <!-- Standalone power screen -->
   <section id="power-screen" aria-label="Power on Studio32">
-    <button
-      id="power-button"
-      type="button"
-      aria-label="Power on Studio32"
-    >
+    <button id="power-button" type="button" aria-label="Power on Studio32">
       <span class="power-symbol" aria-hidden="true">⏻</span>
       <span class="power-label">boot Studio32</span>
     </button>
   </section>
 
-  <!-- Desktop -->
   <main id="desktop" class="hidden" aria-label="Studio32 desktop">
     <div class="desktop-icons">
       <button class="desktop-icon" data-app="about" type="button">
         <span class="icon-image">
-          <img
-            src="studio32.png"
-            width="340"
-            height="354"
-            alt="Studio32 logo"
-          >
+          <img src="studio32.png" width="340" height="354" alt="Studio32 logo">
         </span>
         <span class="icon-label">About</span>
       </button>
@@ -678,47 +643,31 @@
         <span class="icon-image" aria-hidden="true">?</span>
         <span class="icon-label">Game</span>
       </button>
+
+      <button class="desktop-icon" data-app="contact" type="button">
+        <span class="icon-image">
+          <img src="mail.png" width="32" height="32" alt="Contact">
+        </span>
+        <span class="icon-label">Contact</span>
+      </button>
     </div>
 
-    <!-- About window -->
-    <section
-      class="window app-window hidden"
-      data-window="about"
-      aria-labelledby="about-title"
-    >
+    <section class="window app-window hidden" data-window="about" aria-labelledby="about-title">
       <div class="title-bar">
-        <div class="title-bar-text" id="about-title">
-          About Studio32
-        </div>
-
+        <div class="title-bar-text" id="about-title">About Studio32</div>
         <div class="title-bar-controls">
-          <button
-            class="close-window"
-            type="button"
-            aria-label="Close About window"
-          >
-            ×
-          </button>
+          <button class="close-window" type="button" aria-label="Close About window">×</button>
         </div>
       </div>
 
       <div class="window-body app-content">
-        <img
-          class="large-logo"
-          src="studio32.png"
-          width="340"
-          height="354"
-          alt="Studio32 logo"
-        >
-
+        <img class="large-logo" src="studio32.png" width="340" height="354" alt="Studio32 logo">
         <div class="inset-panel">
           <h2>About Studio32.</h2>
-
           <p>
             Studio32 is an indie animation/film studio started by some teens
             hoping to not only make cool things, but also make something bigger.
           </p>
-
           <p>
             Studio32 is making some cool things, cringe, not cringe.
             Depends on the team's acting skills ;)
@@ -727,46 +676,30 @@
       </div>
     </section>
 
-    <!-- Projects window -->
-    <section
-      class="window app-window hidden"
-      data-window="projects"
-      aria-labelledby="projects-title"
-    >
+    <section class="window app-window hidden" data-window="projects" aria-labelledby="projects-title">
       <div class="title-bar">
-        <div class="title-bar-text" id="projects-title">
-          Projects
-        </div>
-
+        <div class="title-bar-text" id="projects-title">Projects</div>
         <div class="title-bar-controls">
-          <button
-            class="close-window"
-            type="button"
-            aria-label="Close Projects window"
-          >
-            ×
-          </button>
+          <button class="close-window" type="button" aria-label="Close Projects window">×</button>
         </div>
       </div>
 
       <div class="window-body app-content">
         <h2>Projects</h2>
-        
-          <div class="project-list">
-          <article class="project">
-            <h3>Earthshine // COMING NEXT MONTH (hopefully, maybe)</h3>
 
+        <div class="project-list">
+          <article class="project">
+            <h3>Earthshine // COMING VERY NOT SOON (lol))</h3>
             <p>
               You play as Lance Lancaster, who has to... shine the Earth...
-              by doing random things? <b><i>TRAILER COMING SOON</i></b>
+              by doing random things?
             </p>
           </article>
         </div>
-        
+
         <div class="project-list">
           <article class="project">
             <h3>The Eco-Man Show // Coming Soon</h3>
-
             <p>
               A green hero saves a random city we don't know much about!
               Will he save it? Probably not.
@@ -776,66 +709,70 @@
       </div>
     </section>
 
-    <!-- Game window -->
-    <section
-      class="window app-window hidden"
-      data-window="game"
-      aria-labelledby="game-title"
-    >
+    <section class="window app-window hidden" data-window="game" aria-labelledby="game-title">
       <div class="title-bar">
-        <div class="title-bar-text" id="game-title">
-          Game
-        </div>
-
+        <div class="title-bar-text" id="game-title">Game</div>
         <div class="title-bar-controls">
-          <button
-            class="close-window"
-            type="button"
-            aria-label="Close Game window"
-          >
-            ×
-          </button>
+          <button class="close-window" type="button" aria-label="Close Game window">×</button>
         </div>
       </div>
 
       <div class="window-body app-content">
         <h2>GAMING MOMENT</h2>
-
         <div class="inset-panel">
           <p>Click the button below and acquire true gaming.</p>
+          <button id="game-button" type="button">make thing</button>
+          <div id="game-output" aria-live="polite">&gt; waiting for input...</div>
+        </div>
+      </div>
+    </section>
 
-          <button id="game-button" type="button">
-            make thing
-          </button>
+    <section class="window app-window hidden" data-window="contact" aria-labelledby="contact-title">
+      <div class="title-bar">
+        <div class="title-bar-text" id="contact-title">Contact</div>
+        <div class="title-bar-controls">
+          <button class="close-window" type="button" aria-label="Close Contact window">×</button>
+        </div>
+      </div>
 
-          <div id="game-output" aria-live="polite">
-            &gt; waiting for input...
+      <div class="window-body app-content">
+        <h2>Which email would you like to send to?</h2>
+
+        <div class="project-list">
+          <div class="project">
+            <button type="button" onclick="window.location.href='mailto:contact@studio32.gvyoutube.net'">
+              Contact
+            </button>
+            <p>General help or such.</p>
+          </div>
+
+          <div class="project">
+            <button type="button" onclick="window.location.href='mailto:graison@studio32.gvyoutube.net'">
+              To Graison
+            </button>
+            <p>Contact Studio32's founder, just to say hi or ask anything!</p>
+          </div>
+
+          <div class="project">
+            <button type="button" onclick="window.location.href='mailto:inquiry@studio32.gvyoutube.net'">
+              Inquiry
+            </button>
+            <p>Wanna work with us on a show idea or just in general? Contact us here!</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Uncloseable spooky-month window -->
-    <section
-      id="spooky-window"
-      class="window spooky-window hidden"
-      aria-label="Spooky Month"
-    >
+    <section id="spooky-window" class="window spooky-window hidden" aria-label="Spooky Month">
       <div class="title-bar">
-        <div class="title-bar-text">
-          itisthespookymonth.exe
-        </div>
+        <div class="title-bar-text">itisthespookymonth.exe</div>
       </div>
 
       <div class="window-body spooky-content">
-        <img
-          src="spookymonth.gif"
-          alt="Spooky Month animated graphic"
-        >
+        <img src="spookymonth.gif" alt="Spooky Month animated graphic">
       </div>
     </section>
 
-    <!-- Error dialog -->
     <section
       id="error-dialog"
       class="window hidden"
@@ -844,55 +781,25 @@
       aria-describedby="error-dialog-message"
     >
       <div class="title-bar">
-        <div class="title-bar-text" id="error-dialog-title">
-          Studio32
-        </div>
-
+        <div class="title-bar-text" id="error-dialog-title">Studio32</div>
         <div class="title-bar-controls">
-          <button
-            id="error-dialog-close"
-            type="button"
-            aria-label="Close error dialog"
-          >
-            ×
-          </button>
+          <button id="error-dialog-close" type="button" aria-label="Close error dialog">×</button>
         </div>
       </div>
 
       <div class="window-body">
-        <img
-          id="error-dialog-icon"
-          src="error.png"
-          width="48"
-          height="48"
-          alt="Error"
-        >
-
-        <p id="error-dialog-message">
-          You killed the vibe, man... :(
-        </p>
+        <img id="error-dialog-icon" src="error.png" width="48" height="48" alt="Error">
+        <p id="error-dialog-message">You killed the vibe, man... :(</p>
       </div>
 
       <div id="error-dialog-actions">
-        <button id="error-dialog-ok" type="button">
-          OK
-        </button>
+        <button id="error-dialog-ok" type="button">OK</button>
       </div>
     </section>
 
-    <!-- Start menu -->
-    <section
-      id="start-menu"
-      class="window hidden"
-      aria-label="Start menu"
-    >
+    <section id="start-menu" class="window hidden" aria-label="Start menu">
       <div class="start-sidebar">
-        <img
-          src="studio32.png"
-          width="340"
-          height="354"
-          alt=""
-        >
+        <img src="studio32.png" width="340" height="354" alt="">
         <span>Studio32</span>
       </div>
 
@@ -912,131 +819,59 @@
           <span>Game</span>
         </button>
 
-        <button
-          class="start-item"
-          id="youtube-menu-item"
-          type="button"
-        >
+        <button class="start-item" data-app="contact" type="button">
+          <span aria-hidden="true">✉</span>
+          <span>Contact</span>
+        </button>
+
+        <button id="youtube-menu-item" class="start-item" type="button">
           <span aria-hidden="true">▶</span>
           <span>YouTube</span>
         </button>
 
         <hr>
 
-        <button
-          class="start-item"
-          id="shutdown-button"
-          type="button"
-        >
+        <button class="start-item" id="shutdown-button" type="button">
           <span aria-hidden="true">⏻</span>
           <span>Shut Down</span>
         </button>
       </div>
     </section>
 
-    <!-- Taskbar -->
     <footer id="taskbar">
-      <button
-        id="start-button"
-        type="button"
-        aria-expanded="false"
-        aria-controls="start-menu"
-      >
-        <img
-          src="studio32.png"
-          width="340"
-          height="354"
-          alt=""
-        >
+      <button id="start-button" type="button" aria-expanded="false" aria-controls="start-menu">
+        <img src="studio32.png" width="340" height="354" alt="">
         <span>Start</span>
       </button>
 
-      <span class="taskbar-status">
-        Studio32 is running
-      </span>
+      <span class="taskbar-status">Studio32 is running</span>
     </footer>
   </main>
 
-  <!-- Intro video -->
-  <video
-    id="intro-video"
-    class="hidden"
-    src="studio32intro.webm"
-    playsinline
-    preload="auto"
-    aria-label="Studio32 intro"
-  ></video>
+  <video id="intro-video" class="hidden" src="studio32intro.webm" playsinline preload="auto" aria-label="Studio32 intro"></video>
 
-  <!-- Audio -->
-  <audio
-    id="shutdown-sound"
-    src="tada.mp3"
-    preload="auto"
-  ></audio>
-
-  <audio
-    id="spooky-intro-sound"
-    src="itisthespookymonth.mp3"
-    preload="auto"
-  ></audio>
-
-  <audio
-    id="spooky-loop-sound"
-    src="spookymonth.mp3"
-    preload="auto"
-    loop
-  ></audio>
-
-  <audio
-    id="error-sound"
-    src="95error.mp3"
-    preload="auto"
-  ></audio>
+  <audio id="shutdown-sound" src="tada.mp3" preload="auto"></audio>
+  <audio id="spooky-intro-sound" src="itisthespookymonth.mp3" preload="auto"></audio>
+  <audio id="spooky-loop-sound" src="spookymonth.mp3" preload="auto" loop></audio>
+  <audio id="error-sound" src="95error.mp3" preload="auto"></audio>
 
   <script>
     const powerScreen = document.getElementById("power-screen");
     const powerButton = document.getElementById("power-button");
     const desktop = document.getElementById("desktop");
     const introVideo = document.getElementById("intro-video");
-
     const startButton = document.getElementById("start-button");
     const startMenu = document.getElementById("start-menu");
     const shutdownButton = document.getElementById("shutdown-button");
-    const youtubeMenuItem = document.getElementById(
-      "youtube-menu-item"
-    );
-
-    const shutdownSound = document.getElementById(
-      "shutdown-sound"
-    );
-
-    const spookyWindow = document.getElementById(
-      "spooky-window"
-    );
-
-    const spookyIntroSound = document.getElementById(
-      "spooky-intro-sound"
-    );
-
-    const spookyLoopSound = document.getElementById(
-      "spooky-loop-sound"
-    );
-
-    const errorDialog = document.getElementById(
-      "error-dialog"
-    );
-
-    const errorDialogClose = document.getElementById(
-      "error-dialog-close"
-    );
-
-    const errorDialogOk = document.getElementById(
-      "error-dialog-ok"
-    );
-
-    const errorSound = document.getElementById(
-      "error-sound"
-    );
+    const youtubeMenuItem = document.getElementById("youtube-menu-item");
+    const shutdownSound = document.getElementById("shutdown-sound");
+    const spookyWindow = document.getElementById("spooky-window");
+    const spookyIntroSound = document.getElementById("spooky-intro-sound");
+    const spookyLoopSound = document.getElementById("spooky-loop-sound");
+    const errorDialog = document.getElementById("error-dialog");
+    const errorDialogClose = document.getElementById("error-dialog-close");
+    const errorDialogOk = document.getElementById("error-dialog-ok");
+    const errorSound = document.getElementById("error-sound");
 
     let currentZIndex = 10;
     let shuttingDown = false;
@@ -1051,20 +886,14 @@
 
     function getCookie(name) {
       const prefix = `${name}=`;
-
       const cookie = document.cookie
         .split("; ")
         .find((item) => item.startsWith(prefix));
-
-      return cookie
-        ? decodeURIComponent(cookie.slice(prefix.length))
-        : null;
+      return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
     }
 
     function setCookie(name, value) {
-      document.cookie =
-        `${name}=${encodeURIComponent(value)}; ` +
-        "path=/; SameSite=Lax";
+      document.cookie = `${name}=${encodeURIComponent(value)}; path=/; SameSite=Lax`;
     }
 
     function clearSpookyMonthCookie() {
@@ -1076,9 +905,7 @@
     }
 
     function getWindows() {
-      return document.querySelectorAll(
-        ".app-window, .spooky-window, #error-dialog"
-      );
+      return document.querySelectorAll(".app-window, .spooky-window, #error-dialog");
     }
 
     function closeStartMenu() {
@@ -1090,21 +917,14 @@
       getWindows().forEach((otherWindow) => {
         otherWindow.classList.remove("front");
       });
-
       windowElement.classList.remove("hidden");
       windowElement.classList.add("front");
       windowElement.style.zIndex = ++currentZIndex;
     }
 
     function openApp(appName) {
-      const appWindow = document.querySelector(
-        `[data-window="${appName}"]`
-      );
-
-      if (!appWindow) {
-        return;
-      }
-
+      const appWindow = document.querySelector(`[data-window="${appName}"]`);
+      if (!appWindow) return;
       bringWindowToFront(appWindow);
       closeStartMenu();
     }
@@ -1113,57 +933,39 @@
       document.querySelectorAll(".desktop-icon").forEach((item) => {
         item.classList.remove("selected");
       });
-
       icon.classList.add("selected");
     }
 
     function launchDesktopIcon(icon) {
       if (icon.dataset.app === "youtube") {
-        window.location.href =
-          "https://youtube.com/@studio32_prod";
+        window.location.href = "https://youtube.com/@studio32_pro";
         return;
       }
-
       openApp(icon.dataset.app);
     }
 
     function playIntroVideo() {
       document.body.classList.add("video-playing");
       introVideo.classList.remove("hidden");
-
       introVideo.play().catch(() => {
         introVideo.controls = true;
       });
-
-      introVideo.addEventListener(
-        "ended",
-        finishIntroVideo,
-        { once: true }
-      );
-
-      introVideo.addEventListener(
-        "error",
-        finishIntroVideo,
-        { once: true }
-      );
+      introVideo.addEventListener("ended", finishIntroVideo, { once: true });
+      introVideo.addEventListener("error", finishIntroVideo, { once: true });
     }
 
     function finishIntroVideo() {
-      if (introFinished) {
-        return;
-      }
-
+      if (introFinished) return;
       introFinished = true;
       introVideo.pause();
       introVideo.classList.add("hidden");
       document.body.classList.remove("video-playing");
-
       showRefreshErrorIfNeeded();
     }
 
     function showRefreshErrorIfNeeded() {
       if (
-        !refreshErrorPending ||
+        refreshErrorPending === false ||
         spookyUnlocked ||
         shuttingDown ||
         desktop.classList.contains("hidden") ||
@@ -1174,13 +976,8 @@
 
       refreshErrorTimer = window.setTimeout(() => {
         refreshErrorTimer = null;
-
-        /*
-          Check again in case the user activates the spooky
-          easter egg during the delay.
-        */
         if (
-          !refreshErrorPending ||
+          refreshErrorPending === false ||
           spookyUnlocked ||
           shuttingDown ||
           desktop.classList.contains("hidden")
@@ -1190,17 +987,14 @@
 
         refreshErrorPending = false;
         clearSpookyMonthCookie();
-
         errorDialog.classList.remove("hidden");
         errorDialog.classList.add("front");
         errorDialog.style.zIndex = ++currentZIndex;
         errorDialog.style.left = "50%";
         errorDialog.style.top = "180px";
         errorDialog.style.transform = "translateX(-50%)";
-
         errorSound.currentTime = 0;
         errorSound.play().catch(() => {});
-
         window.setTimeout(() => {
           errorDialogOk.focus();
         }, 0);
@@ -1212,10 +1006,7 @@
     }
 
     function shutdown() {
-      if (shuttingDown) {
-        return;
-      }
-
+      if (shuttingDown) return;
       shuttingDown = true;
       closeStartMenu();
 
@@ -1247,11 +1038,7 @@
     }
 
     function openSpookyWindow() {
-      if (
-        spookyUnlocked ||
-        shuttingDown ||
-        !isOctober()
-      ) {
+      if (spookyUnlocked || shuttingDown || !isOctober()) {
         return;
       }
 
@@ -1287,41 +1074,24 @@
       }
 
       spookyIntroSound.currentTime = 0;
-
-      spookyIntroSound.addEventListener(
-        "ended",
-        finishSpookyIntro,
-        { once: true }
-      );
-
-      spookyIntroSound.addEventListener(
-        "error",
-        finishSpookyIntro,
-        { once: true }
-      );
-
+      spookyIntroSound.addEventListener("ended", finishSpookyIntro, { once: true });
+      spookyIntroSound.addEventListener("error", finishSpookyIntro, { once: true });
       spookyIntroSound.play().catch(() => {
         finishSpookyIntro();
       });
     }
 
-    /* Power on */
-
     powerButton.addEventListener("click", () => {
       powerScreen.classList.add("hidden");
       desktop.classList.remove("hidden");
       document.title = "Studio32 — Desktop";
-
       playIntroVideo();
-
       window.setTimeout(() => {
         if (!introFinished) {
           finishIntroVideo();
         }
       }, 30000);
     });
-
-    /* Desktop icons */
 
     document.querySelectorAll(".desktop-icon").forEach((icon) => {
       icon.addEventListener("click", () => {
@@ -1333,62 +1103,36 @@
       });
     });
 
-    /* Normal close buttons */
-
     document.querySelectorAll(".close-window").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
-
-        const windowElement =
-          button.closest(".app-window");
-
+        const windowElement = button.closest(".app-window, .spooky-window, #error-dialog");
         if (windowElement) {
           windowElement.classList.add("hidden");
         }
       });
     });
 
-    /* Start menu */
-
     startButton.addEventListener("click", () => {
-      const menuIsOpen =
-        !startMenu.classList.contains("hidden");
-
+      const menuIsOpen = !startMenu.classList.contains("hidden");
       startMenu.classList.toggle("hidden", menuIsOpen);
-      startButton.setAttribute(
-        "aria-expanded",
-        String(!menuIsOpen)
-      );
+      startButton.setAttribute("aria-expanded", String(!menuIsOpen));
     });
 
-    document
-      .querySelectorAll(".start-item[data-app]")
-      .forEach((item) => {
-        item.addEventListener("click", () => {
-          openApp(item.dataset.app);
-        });
+    document.querySelectorAll(".start-item[data-app]").forEach((item) => {
+      item.addEventListener("click", () => {
+        openApp(item.dataset.app);
       });
+    });
 
     youtubeMenuItem.addEventListener("click", () => {
-      window.location.href =
-        "https://youtube.com/@studio32_prod";
+      window.location.href = "https://youtube.com/@studio32_pro";
     });
 
     shutdownButton.addEventListener("click", shutdown);
 
-    /* Error dialog */
-
-    errorDialogClose.addEventListener(
-      "click",
-      closeRefreshError
-    );
-
-    errorDialogOk.addEventListener(
-      "click",
-      closeRefreshError
-    );
-
-    /* October typing easter egg */
+    errorDialogClose.addEventListener("click", closeRefreshError);
+    errorDialogOk.addEventListener("click", closeRefreshError);
 
     document.addEventListener("keydown", (event) => {
       if (
@@ -1401,7 +1145,6 @@
       }
 
       const activeElement = document.activeElement;
-
       if (
         activeElement &&
         (
@@ -1418,13 +1161,11 @@
       }
 
       spookyInput += event.key.toLowerCase();
-
       if (spookyInput.length > spookyCode.length) {
         spookyInput = spookyInput.slice(-spookyCode.length);
       }
 
       window.clearTimeout(spookyResetTimer);
-
       spookyResetTimer = window.setTimeout(() => {
         spookyInput = "";
       }, 4000);
@@ -1435,18 +1176,8 @@
       }
     });
 
-    /*
-      Draggable windows.
-
-      The error dialog begins centered with transform: translateX(-50%).
-      On the first drag, its visual position is converted to normal
-      desktop-relative left/top coordinates and the transform is removed.
-    */
-
     getWindows().forEach((windowElement) => {
-      const titleBar =
-        windowElement.querySelector(".title-bar");
-
+      const titleBar = windowElement.querySelector(".title-bar");
       let dragging = false;
       let offsetX = 0;
       let offsetY = 0;
@@ -1455,167 +1186,77 @@
         getWindows().forEach((otherWindow) => {
           otherWindow.classList.remove("front");
         });
-
         windowElement.classList.add("front");
         windowElement.style.zIndex = ++currentZIndex;
       }
 
-      titleBar.addEventListener(
-        "pointerdown",
-        (event) => {
-          if (event.target.closest("button")) {
-            return;
-          }
-
-          event.preventDefault();
-
-          dragging = true;
-          bringForward();
-
-          const desktopRect =
-            desktop.getBoundingClientRect();
-
-          const windowRect =
-            windowElement.getBoundingClientRect();
-
-          /*
-            Convert screen coordinates to desktop coordinates.
-          */
-          windowElement.style.left =
-            `${windowRect.left - desktopRect.left}px`;
-
-          windowElement.style.top =
-            `${windowRect.top - desktopRect.top}px`;
-
-          /*
-            Remove centering transforms before dragging.
-          */
-          windowElement.style.transform = "none";
-
-          const updatedRect =
-            windowElement.getBoundingClientRect();
-
-          offsetX =
-            event.clientX - updatedRect.left;
-
-          offsetY =
-            event.clientY - updatedRect.top;
-
-          titleBar.setPointerCapture(event.pointerId);
+      titleBar.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("button")) {
+          return;
         }
-      );
 
-      titleBar.addEventListener(
-        "pointermove",
-        (event) => {
-          if (!dragging) {
-            return;
-          }
+        event.preventDefault();
+        dragging = true;
+        bringForward();
 
-          event.preventDefault();
+        const desktopRect = desktop.getBoundingClientRect();
+        const windowRect = windowElement.getBoundingClientRect();
 
-          const desktopRect =
-            desktop.getBoundingClientRect();
+        offsetX = event.clientX - (windowRect.left - desktopRect.left);
+        offsetY = event.clientY - (windowRect.top - desktopRect.top);
 
-          const windowRect =
-            windowElement.getBoundingClientRect();
+        titleBar.setPointerCapture(event.pointerId);
+      });
 
-          const taskbarHeight = 35;
-          const minimumVisible = 32;
+      titleBar.addEventListener("pointermove", (event) => {
+        if (!dragging) return;
 
-          let nextLeft =
-            event.clientX -
-            desktopRect.left -
-            offsetX;
+        event.preventDefault();
 
-          let nextTop =
-            event.clientY -
-            desktopRect.top -
-            offsetY;
+        const desktopRect = desktop.getBoundingClientRect();
+        const windowRect = windowElement.getBoundingClientRect();
+        const taskbarHeight = 35;
+        const minimumVisible = 32;
 
-          nextLeft = Math.max(
-            -windowRect.width + minimumVisible,
-            Math.min(
-              nextLeft,
-              desktopRect.width - minimumVisible
-            )
-          );
+        let nextLeft = event.clientX - desktopRect.left - offsetX;
+        let nextTop = event.clientY - desktopRect.top - offsetY;
 
-          nextTop = Math.max(
-            0,
-            Math.min(
-              nextTop,
-              desktopRect.height -
-                taskbarHeight -
-                minimumVisible
-            )
-          );
+        nextLeft = Math.max(-windowRect.width + minimumVisible, Math.min(nextLeft, desktopRect.width - minimumVisible));
+        nextTop = Math.max(0, Math.min(nextTop, desktopRect.height - taskbarHeight - minimumVisible));
 
-          windowElement.style.left =
-            `${nextLeft}px`;
-
-          windowElement.style.top =
-            `${nextTop}px`;
-        }
-      );
+        windowElement.style.left = `${nextLeft}px`;
+        windowElement.style.top = `${nextTop}px`;
+      });
 
       function stopDragging(event) {
         dragging = false;
-
-        if (
-          event &&
-          titleBar.hasPointerCapture(event.pointerId)
-        ) {
+        if (event && titleBar.hasPointerCapture(event.pointerId)) {
           titleBar.releasePointerCapture(event.pointerId);
         }
       }
 
-      titleBar.addEventListener(
-        "pointerup",
-        stopDragging
-      );
-
-      titleBar.addEventListener(
-        "pointercancel",
-        stopDragging
-      );
-
-      windowElement.addEventListener(
-        "pointerdown",
-        bringForward
-      );
+      titleBar.addEventListener("pointerup", stopDragging);
+      titleBar.addEventListener("pointercancel", stopDragging);
+      windowElement.addEventListener("pointerdown", bringForward);
     });
 
-    /* Game */
-
-    const prophecies = [
+    const prophecy = [
       "make it stranger.",
       "ship the weird version.",
       "add more blue.",
       "trust the first idea.",
-      "MORE COWBELL"
+      "MORE COWBELL!"
     ];
 
-    document
-      .getElementById("game-button")
-      .addEventListener("click", () => {
-        const prophecy =
-          prophecies[
-            Math.floor(Math.random() * prophecies.length)
-          ];
+    document.getElementById("game-button").addEventListener("click", () => {
+      const prophecyText = prophecy[Math.floor(Math.random() * prophecy.length)];
+      document.getElementById("game-output").textContent = `> ${prophecyText}`;
+    });
 
-        document.getElementById(
-          "game-output"
-        ).textContent = `> ${prophecy}`;
-      });
+    refreshErrorPending = getCookie("spookymonth") === "1";
 
-    /*
-      If the previous page had the spooky easter egg active,
-      show the error after the next desktop session loads.
-    */
-
-    refreshErrorPending =
-      getCookie("spookymonth") === "1";
+    // If previous session had spooky mode active, show the error after the next desktop session loads.
+    showRefreshErrorIfNeeded();
   </script>
 </body>
 </html>
