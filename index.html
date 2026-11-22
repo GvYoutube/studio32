@@ -193,6 +193,50 @@
       opacity: 0;
     }
 
+    body.gta6-theme {
+      --blue: #ff2fa2;
+      --teal: #56c7d9;
+      --gray: #e7d9e9;
+      --dark-gray: #a54883;
+    }
+
+    body.gta6-theme #desktop {
+      background:
+        radial-gradient(circle at 82% 18%, rgba(255, 244, 178, .72) 0 5%, transparent 18%),
+        linear-gradient(145deg, #38bfd1 0%, #62d8c5 42%, #ff78bd 72%, #a64b9c 100%);
+    }
+
+    body.gta6-theme #desktop::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, .08) 0 2px, transparent 2px 8px),
+        linear-gradient(180deg, transparent 65%, rgba(43, 25, 79, .28));
+    }
+
+    body.gta6-theme .desktop-icons,
+    body.gta6-theme #start-menu {
+      position: relative;
+      z-index: 1;
+    }
+
+    body.gta6-theme .desktop-icon.selected,
+    body.gta6-theme .start-item:hover {
+      background: #ff2fa2;
+    }
+
+    body.gta6-theme .title-bar {
+      background: linear-gradient(90deg, #a64b9c, #ff2fa2) !important;
+    }
+
+    body.gta6-theme .taskbar-status {
+      color: #40263e;
+      background: rgba(255, 255, 255, .35);
+    }
+
     .desktop-icons {
       display: grid;
       align-content: start;
@@ -348,6 +392,7 @@
       top: 180px;
       left: 50%;
       width: min(430px, calc(100vw - 32px));
+      max-width: calc(100vw - 32px);
       transform: translateX(-50%);
     }
 
@@ -358,6 +403,7 @@
       min-height: 105px;
       padding: 20px 18px 18px;
       background: var(--gray);
+      overflow: hidden;
     }
 
     #error-dialog-icon {
@@ -777,6 +823,7 @@
       id="error-dialog"
       class="window hidden"
       role="alertdialog"
+      aria-modal="true"
       aria-labelledby="error-dialog-title"
       aria-describedby="error-dialog-message"
     >
@@ -854,6 +901,7 @@
   <audio id="spooky-intro-sound" src="itisthespookymonth.mp3" preload="auto"></audio>
   <audio id="spooky-loop-sound" src="spookymonth.mp3" preload="auto" loop></audio>
   <audio id="error-sound" src="95error.mp3" preload="auto"></audio>
+  <audio id="gta6-loop-sound" src="flowerhurricane.mp3" preload="auto" loop></audio>
 
   <script>
     const powerScreen = document.getElementById("power-screen");
@@ -868,16 +916,22 @@
     const spookyWindow = document.getElementById("spooky-window");
     const spookyIntroSound = document.getElementById("spooky-intro-sound");
     const spookyLoopSound = document.getElementById("spooky-loop-sound");
+    const gta6LoopSound = document.getElementById("gta6-loop-sound");
     const errorDialog = document.getElementById("error-dialog");
     const errorDialogClose = document.getElementById("error-dialog-close");
     const errorDialogOk = document.getElementById("error-dialog-ok");
     const errorSound = document.getElementById("error-sound");
+    const errorDialogTitle = document.getElementById("error-dialog-title");
+    const errorDialogMessage = document.getElementById("error-dialog-message");
 
     let currentZIndex = 10;
     let shuttingDown = false;
     let spookyUnlocked = false;
     let spookyInput = "";
     let spookyResetTimer = null;
+    let gta6Unlocked = false;
+    let gta6Input = "";
+    let gta6ResetTimer = null;
     let refreshErrorPending = false;
     let refreshErrorTimer = null;
     let introFinished = false;
@@ -911,6 +965,33 @@
     function closeStartMenu() {
       startMenu.classList.add("hidden");
       startButton.setAttribute("aria-expanded", "false");
+    }
+
+    function showError(title, message) {
+      errorDialogTitle.textContent = title;
+      errorDialogMessage.textContent = message;
+      bringWindowToFront(errorDialog);
+      errorDialog.style.left = "50%";
+      errorDialog.style.top = "180px";
+      errorDialog.style.transform = "translateX(-50%)";
+      errorSound.currentTime = 0;
+      errorSound.play().catch(() => {});
+      window.setTimeout(() => {
+        errorDialogOk.focus();
+      }, 0);
+    }
+
+    function triggerGTA6() {
+      if (gta6Unlocked || shuttingDown || desktop.classList.contains("hidden")) {
+        return;
+      }
+
+      gta6Unlocked = true;
+      document.body.classList.add("gta6-theme");
+      document.title = "Grand Theft Auto VI — Desktop";
+      gta6LoopSound.currentTime = 0;
+      gta6LoopSound.play().catch(() => {});
+      showError("GTA 6", "Only love never hesitates.");
     }
 
     function bringWindowToFront(windowElement) {
@@ -987,17 +1068,7 @@
 
         refreshErrorPending = false;
         clearSpookyMonthCookie();
-        errorDialog.classList.remove("hidden");
-        errorDialog.classList.add("front");
-        errorDialog.style.zIndex = ++currentZIndex;
-        errorDialog.style.left = "50%";
-        errorDialog.style.top = "180px";
-        errorDialog.style.transform = "translateX(-50%)";
-        errorSound.currentTime = 0;
-        errorSound.play().catch(() => {});
-        window.setTimeout(() => {
-          errorDialogOk.focus();
-        }, 0);
+        showError("Studio32", "You killed the vibe, man... :(");
       }, 1200);
     }
 
@@ -1021,6 +1092,8 @@
 
       spookyLoopSound.pause();
       spookyLoopSound.currentTime = 0;
+      gta6LoopSound.pause();
+      gta6LoopSound.currentTime = 0;
 
       desktop.classList.add("shutting-down");
       document.body.classList.add("shutting-down");
@@ -1136,9 +1209,7 @@
 
     document.addEventListener("keydown", (event) => {
       if (
-        spookyUnlocked ||
         shuttingDown ||
-        !isOctober() ||
         desktop.classList.contains("hidden")
       ) {
         return;
@@ -1160,19 +1231,47 @@
         return;
       }
 
-      spookyInput += event.key.toLowerCase();
-      if (spookyInput.length > spookyCode.length) {
-        spookyInput = spookyInput.slice(-spookyCode.length);
+      const key = event.key.toLowerCase();
+
+      if (!gta6Unlocked) {
+        gta6Input += key;
+        if (gta6Input.length > 4) {
+          gta6Input = gta6Input.slice(-4);
+        }
+
+        window.clearTimeout(gta6ResetTimer);
+        gta6ResetTimer = window.setTimeout(() => {
+          gta6Input = "";
+        }, 4000);
+
+        if (gta6Input === "gta6") {
+          gta6Input = "";
+          triggerGTA6();
+        }
       }
 
-      window.clearTimeout(spookyResetTimer);
-      spookyResetTimer = window.setTimeout(() => {
-        spookyInput = "";
-      }, 4000);
+      if (!spookyUnlocked && isOctober()) {
+        spookyInput += key;
+        if (spookyInput.length > spookyCode.length) {
+          spookyInput = spookyInput.slice(-spookyCode.length);
+        }
 
-      if (spookyInput === spookyCode) {
-        spookyInput = "";
-        triggerSpookyMonth();
+        window.clearTimeout(spookyResetTimer);
+        spookyResetTimer = window.setTimeout(() => {
+          spookyInput = "";
+        }, 4000);
+
+        if (spookyInput === spookyCode) {
+          spookyInput = "";
+          triggerSpookyMonth();
+        }
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !errorDialog.classList.contains("hidden")) {
+        closeRefreshError();
+        errorDialogOk.blur();
       }
     });
 
@@ -1201,6 +1300,12 @@
 
         const desktopRect = desktop.getBoundingClientRect();
         const windowRect = windowElement.getBoundingClientRect();
+
+        if (windowElement === errorDialog) {
+          windowElement.style.left = `${windowRect.left - desktopRect.left}px`;
+          windowElement.style.top = `${windowRect.top - desktopRect.top}px`;
+          windowElement.style.transform = "none";
+        }
 
         offsetX = event.clientX - (windowRect.left - desktopRect.left);
         offsetY = event.clientY - (windowRect.top - desktopRect.top);
