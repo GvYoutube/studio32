@@ -217,8 +217,7 @@
         linear-gradient(180deg, transparent 65%, rgba(43, 25, 79, .28));
     }
 
-    body.gta6-theme .desktop-icons,
-    body.gta6-theme #start-menu {
+    body.gta6-theme .desktop-icons {
       position: relative;
       z-index: 1;
     }
@@ -235,6 +234,42 @@
     body.gta6-theme .taskbar-status {
       color: #40263e;
       background: rgba(255, 255, 255, .35);
+    }
+
+    #gta6-spectrum {
+      position: absolute;
+      right: 0;
+      bottom: 35px;
+      left: 0;
+      z-index: 3;
+      display: flex;
+      align-items: flex-end;
+      gap: clamp(2px, .45vw, 7px);
+      height: 112px;
+      width: 100%;
+      margin: 0;
+      padding: 0 10px 8px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    body.gta6-theme #gta6-spectrum {
+      opacity: .82;
+      transform: translateY(0);
+    }
+
+    #gta6-spectrum span {
+      flex: 1 1 0;
+      min-width: 2px;
+      max-width: 48px;
+      height: 6px;
+      background: linear-gradient(180deg, #fff1a8 0%, #ff78bd 45%, #9d5cff 100%);
+      border: 1px solid rgba(255, 255, 255, .25);
+      box-shadow: 0 0 10px rgba(255, 107, 195, .7);
+      transform-origin: bottom;
     }
 
     .desktop-icons {
@@ -401,8 +436,10 @@
       align-items: flex-start;
       gap: 18px;
       min-height: 105px;
+      margin: 0;
       padding: 20px 18px 18px;
       background: var(--gray);
+      border: 0;
       overflow: hidden;
     }
 
@@ -440,13 +477,23 @@
     }
 
     #start-menu {
-      position: absolute;
-      left: 3px;
-      bottom: 35px;
-      z-index: 70;
+      position: fixed !important;
+      left: 3px !important;
+      top: auto !important;
+      bottom: 35px !important;
+      z-index: 70 !important;
       display: grid;
       grid-template-columns: 30px 1fr;
       width: 235px;
+      height: auto;
+      margin: 0;
+      box-sizing: border-box;
+      transform: none !important;
+      background: var(--gray) !important;
+      border-top: 2px solid var(--white);
+      border-left: 2px solid var(--white);
+      border-right: 2px solid var(--black);
+      border-bottom: 2px solid var(--black);
     }
 
     .start-sidebar {
@@ -475,6 +522,7 @@
 
     .start-items {
       padding: 4px;
+      background: var(--gray);
     }
 
     .start-items hr {
@@ -698,6 +746,17 @@
       </button>
     </div>
 
+    <div id="gta6-spectrum" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+
     <section class="window app-window hidden" data-window="about" aria-labelledby="about-title">
       <div class="title-bar">
         <div class="title-bar-text" id="about-title">About Studio32</div>
@@ -912,11 +971,14 @@
     const startMenu = document.getElementById("start-menu");
     const shutdownButton = document.getElementById("shutdown-button");
     const youtubeMenuItem = document.getElementById("youtube-menu-item");
+    const taskbar = document.getElementById("taskbar");
     const shutdownSound = document.getElementById("shutdown-sound");
     const spookyWindow = document.getElementById("spooky-window");
     const spookyIntroSound = document.getElementById("spooky-intro-sound");
     const spookyLoopSound = document.getElementById("spooky-loop-sound");
     const gta6LoopSound = document.getElementById("gta6-loop-sound");
+    const gta6Spectrum = document.getElementById("gta6-spectrum");
+    const gta6SpectrumBars = Array.from(gta6Spectrum.querySelectorAll("span"));
     const errorDialog = document.getElementById("error-dialog");
     const errorDialogClose = document.getElementById("error-dialog-close");
     const errorDialogOk = document.getElementById("error-dialog-ok");
@@ -935,6 +997,11 @@
     let refreshErrorPending = false;
     let refreshErrorTimer = null;
     let introFinished = false;
+    let gta6TitleTimer = null;
+    let gta6SpectrumFrame = null;
+    let gta6AudioContext = null;
+    let gta6Analyser = null;
+    let gta6Source = null;
 
     const spookyCode = "itisthespookymonth";
 
@@ -967,6 +1034,27 @@
       startButton.setAttribute("aria-expanded", "false");
     }
 
+    function positionStartMenu() {
+      const taskbarRect = taskbar.getBoundingClientRect();
+      startMenu.style.left = `${taskbarRect.left + 3}px`;
+      startMenu.style.bottom = `${window.innerHeight - taskbarRect.top}px`;
+    }
+
+    startButton.addEventListener("click", () => {
+      const menuIsOpen = !startMenu.classList.contains("hidden");
+      startMenu.classList.toggle("hidden", menuIsOpen);
+      startButton.setAttribute("aria-expanded", String(!menuIsOpen));
+      if (!menuIsOpen) {
+        positionStartMenu();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (!startMenu.classList.contains("hidden")) {
+        positionStartMenu();
+      }
+    });
+
     function showError(title, message) {
       errorDialogTitle.textContent = title;
       errorDialogMessage.textContent = message;
@@ -981,6 +1069,94 @@
       }, 0);
     }
 
+    function startGTA6TitleMarquee() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.title = "Grand Theft Auto VI — Desktop";
+        return;
+      }
+
+      const titleText = "  ::  GRAND THEFT AUTO VI  ::  ONLY LOVE NEVER HESITATES  ";
+      let titleIndex = 0;
+      document.title = titleText.trim();
+      gta6TitleTimer = window.setInterval(() => {
+        titleIndex = (titleIndex + 1) % titleText.length;
+        document.title =
+          titleText.slice(titleIndex) + titleText.slice(0, titleIndex);
+      }, 240);
+    }
+
+    function stopGTA6Effects() {
+      if (gta6TitleTimer) {
+        window.clearInterval(gta6TitleTimer);
+        gta6TitleTimer = null;
+      }
+      if (gta6SpectrumFrame) {
+        window.cancelAnimationFrame(gta6SpectrumFrame);
+        gta6SpectrumFrame = null;
+      }
+      gta6SpectrumBars.forEach((bar) => {
+        bar.style.height = "6px";
+      });
+    }
+
+    function animateGTA6Spectrum() {
+      if (
+        shuttingDown ||
+        !gta6Unlocked ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return;
+      }
+
+      if (!gta6Analyser) {
+        gta6SpectrumFrame = window.requestAnimationFrame(animateGTA6Spectrum);
+        return;
+      }
+
+      const frequencyData = new Uint8Array(gta6Analyser.frequencyBinCount);
+      gta6Analyser.getByteFrequencyData(frequencyData);
+
+      gta6SpectrumBars.forEach((bar, index) => {
+        const binIndex = Math.floor(
+          (index / gta6SpectrumBars.length) * frequencyData.length * .75
+        );
+        const level = frequencyData[binIndex] / 255;
+        const height = Math.max(6, Math.round(6 + level * 98));
+        bar.style.height = `${height}px`;
+      });
+
+      gta6SpectrumFrame = window.requestAnimationFrame(animateGTA6Spectrum);
+    }
+
+    function setupGTA6Spectrum() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gta6SpectrumBars.forEach((bar, index) => {
+          bar.style.height = `${18 + (index % 5) * 10}px`;
+        });
+        return;
+      }
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) {
+        return;
+      }
+
+      if (!gta6AudioContext) {
+        gta6AudioContext = new AudioContext();
+        gta6Analyser = gta6AudioContext.createAnalyser();
+        gta6Analyser.fftSize = 256;
+        gta6Analyser.smoothingTimeConstant = .72;
+        gta6Source = gta6AudioContext.createMediaElementSource(gta6LoopSound);
+        gta6Source.connect(gta6Analyser);
+        gta6Analyser.connect(gta6AudioContext.destination);
+      }
+
+      gta6AudioContext.resume().catch(() => {});
+      if (!gta6SpectrumFrame) {
+        gta6SpectrumFrame = window.requestAnimationFrame(animateGTA6Spectrum);
+      }
+    }
+
     function triggerGTA6() {
       if (gta6Unlocked || shuttingDown || desktop.classList.contains("hidden")) {
         return;
@@ -988,9 +1164,10 @@
 
       gta6Unlocked = true;
       document.body.classList.add("gta6-theme");
-      document.title = "Grand Theft Auto VI — Desktop";
+      startGTA6TitleMarquee();
       gta6LoopSound.currentTime = 0;
       gta6LoopSound.play().catch(() => {});
+      setupGTA6Spectrum();
       showError("GTA 6", "Only love never hesitates.");
     }
 
@@ -1094,6 +1271,8 @@
       spookyLoopSound.currentTime = 0;
       gta6LoopSound.pause();
       gta6LoopSound.currentTime = 0;
+      stopGTA6Effects();
+      document.title = "Studio32 — Desktop";
 
       desktop.classList.add("shutting-down");
       document.body.classList.add("shutting-down");
@@ -1184,12 +1363,6 @@
           windowElement.classList.add("hidden");
         }
       });
-    });
-
-    startButton.addEventListener("click", () => {
-      const menuIsOpen = !startMenu.classList.contains("hidden");
-      startMenu.classList.toggle("hidden", menuIsOpen);
-      startButton.setAttribute("aria-expanded", String(!menuIsOpen));
     });
 
     document.querySelectorAll(".start-item[data-app]").forEach((item) => {
